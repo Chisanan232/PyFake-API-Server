@@ -1,6 +1,26 @@
 # Version 0.X.X
 
-## 0.3.0
+## 0.4.1
+
+### 🎉 New feature
+
+1. Support running fake server process in background and redirect the access log to the specific log file.
+   1. ``--daemon``: daemonize the fake server process.
+   2. ``--access-log-file``: redirect the fake server access log to the specific file.
+
+
+### 📑 Docs
+
+1. Update the content for new command line options.
+
+
+## 0.4.0 (0.3.0)
+
+Deprecate and pass version **_0.3.0_** because it's forbidden upload same version in PyPI again.
+
+> Refer: https://pypi.org/help/#file-name-reuse:
+> 
+> "PyPI does not allow for a filename to be reused, even once a project has been deleted and recreated."
 
 ### 🎉 New feature
 
