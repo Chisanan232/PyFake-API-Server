@@ -7,6 +7,7 @@ on:
       - "master"
     paths:
 #     This deployment workflow would only be triggered by file change of module *__pkg_info__* because it has the package version info.
+      - ".github/workflows/cd.yaml"    # For test or emergency scenario only
       - "**/__pkg_info__.py"
 
 jobs:
@@ -37,5 +38,5 @@ jobs:
       release-type: ${{ needs.build_git-tag_and_create_github-release.outputs.python_release_version }}
       push-to-PyPI: official
     secrets:
-      pypi_user: ${{ secrets.PYPI_USERNAME }}
-      pypi_token: ${{ secrets.PYPI_PASSWORD }}
+      PyPI_user: ${{ secrets.PYPI_USERNAME }}
+      PyPI_token: ${{ secrets.PYPI_PASSWORD }}
