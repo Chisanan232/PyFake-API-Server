@@ -44,6 +44,7 @@ description = "🕸🤖👺 A Python tool to fake API server, e.g., RESTful API 
 authors = [
     "Liu, Bryant <chi10211201@cycu.org.tw>",
 ]
+license = "MIT"
 packages = [
     { include = "fake_api_server/" },
 ]
