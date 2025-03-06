@@ -1,4 +1,4 @@
-exclude: '.github/|docs/|requirements/'
+exclude: '.github/|docs/'
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -9,6 +9,7 @@ repos:
     - id: debug-statements
     - id: end-of-file-fixer
     - id: trailing-whitespace
+    - id: detect-private-key
 - repo: https://github.com/PyCQA/isort
   rev: 6.0.1
   hooks:
