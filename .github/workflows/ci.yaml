@@ -6,65 +6,50 @@ on:
   push:
     branches:
       - "master"
-      - "develop/**"
-    paths-ignore:
-#     For GitHub dependency bot
-      - ".github/dependabot.yaml"
-      - ".github/workflows/bot-pr.yaml"
-      - ".github/workflows/bot-ci.yaml"
-      - "scripts/ci/chk_pr_list.sh"
-#     For documentation
-      - ".github/ISSUE_TEMPLATE/**"
-      - ".github/workflows/documentation.yaml"
-      - ".cache/**/*.json"
-      - "docs/**"
-      - "**/*.md"
-      - "mkdocs.yml"
-      - "README.md"
-#     For Docker feature
-      - ".github/workflows/docker.yaml"
-      - "scripts/ci/**-docker-**.sh"
-      - "scripts/docker/**"
-      - "Dockerfile"
-      - "README-DOCKER.md"
-#     Others
-      - ".gitcommitrules"
-      - ".gitignore"
-      - ".pre-commit-config.yaml"
-      - ".pylintrc"
+    paths:
+#     For GitHub Action
+      - ".github/workflows/**ci.yaml"
+      - ".github/workflows/rw_build_and_test.yaml"
+      - ".github/workflows/rw_poetry_run_test_with_multi_py_versions.yaml"
+#     For source code and test
+      - "fake_api_server/**/*.py"
+      - "!**/__pkg_info__.py"
+      - "test/**/*.py"
+#     For shell script for CI
+      - "scripts/run_all_tests.sh"
+#     For configurations for test or CI
+      - ".coveragerc"
+      - "codecov.yml"
+      - "pytest.ini"
+      - "sonar-project.properties"
+#     For Python project configuration
+      - "pyproject.toml"
+      - "poetry.lock"
 
   # For the push event, in addition to build and test would be run, it would trigger other service to keep the reports
   # or other checking, i.e., record the test report by CodeCov and check the code quality by SonarQube.
   pull_request:
     branches:
       - "master"
-      - "develop/**"
-    paths-ignore:
-#     For GitHub dependency bot
-      - ".github/dependabot.yaml"
-      - ".github/workflows/bot-pr.yaml"
-      - ".github/workflows/bot-ci.yaml"
-      - "scripts/ci/chk_pr_list.sh"
-#     For documentation
-      - ".github/ISSUE_TEMPLATE/**"
-      - ".github/workflows/documentation.yaml"
-      - ".cache/**/*.json"
-      - "docs/**"
-      - "**/*.md"
-      - "mkdocs.yml"
-      - "README.md"
-#     For Docker feature
-      - ".github/workflows/docker.yaml"
-      - "scripts/ci/**-docker-**.sh"
-      - "scripts/docker/**"
-      - "Dockerfile"
-      - "README-DOCKER.md"
-#     Others
-      - ".gitcommitrules"
-      - ".gitignore"
-      - ".pre-commit-config.yaml"
-      - ".pylintrc"
-      - "LICENSE"
+    paths:
+#     For GitHub Action
+      - ".github/workflows/**ci.yaml"
+      - ".github/workflows/rw_build_and_test.yaml"
+      - ".github/workflows/rw_poetry_run_test_with_multi_py_versions.yaml"
+#     For source code and test
+      - "fake_api_server/**/*.py"
+      - "!**/__pkg_info__.py"
+      - "test/**/*.py"
+#     For shell script for CI
+      - "scripts/run_all_tests.sh"
+#     For configurations for test or CI
+      - ".coveragerc"
+      - "codecov.yml"
+      - "pytest.ini"
+      - "sonar-project.properties"
+#     For Python project configuration
+      - "pyproject.toml"
+      - "poetry.lock"
 
 jobs:
   build-and-test:
