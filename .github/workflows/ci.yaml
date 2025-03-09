@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - "master"
-      - "develop/**"
     paths-ignore:
 #     For GitHub dependency bot
       - ".github/dependabot.yaml"
@@ -38,7 +37,6 @@ on:
   pull_request:
     branches:
       - "master"
-      - "develop/**"
     paths-ignore:
 #     For GitHub dependency bot
       - ".github/dependabot.yaml"
