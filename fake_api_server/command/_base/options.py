@@ -158,7 +158,7 @@ class CommandOption:
         }
         cmd_option_args_clone = copy.copy(cmd_option_args)
         for arg_name, arg_val in cmd_option_args.items():
-            if not arg_val:
+            if arg_val is None:
                 cmd_option_args_clone.pop(arg_name)
         return cmd_option_args_clone
 
