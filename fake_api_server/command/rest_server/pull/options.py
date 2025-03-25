@@ -65,6 +65,7 @@ class BaseFilePath(BaseSubCmdPullOption):
         "words, it would automatically add the base path in front of all the other file "
         "paths in configuration."
     )
+    default_value: str = "./"
 
 
 class IncludeTemplateConfig(BaseSubCmdPullOption):
