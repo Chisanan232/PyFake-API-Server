@@ -1,3 +1,4 @@
+import re
 from typing import Any, Callable, Dict, List, Optional, Union
 from unittest.mock import Mock, patch
 
@@ -118,6 +119,23 @@ class TestMockHTTPServer:
             instantiate_callback=_instantiate, assert_config_path="api.yaml", auto_setup=True
         )
 
+    @pytest.mark.parametrize(
+        "empty_model",
+        [
+            FakeAPIConfig(name=Mock(), description=Mock(), apis=None),
+            FakeAPIConfig(name=Mock(), description=Mock(), apis=MockAPIs(base=Mock(), apis={})),
+        ],
+    )
+    @patch.object(FakeWebServer, "create_api")
+    def test_check_necessary_values_before_create_apis(self, mock_create_apis: Mock, empty_model: FakeAPIConfig):
+        with patch("fake_api_server.server.mock.load_config", return_value=empty_model) as mock_load_config:
+            with pytest.raises(ValueError) as exc_info:
+                MockHTTPServer(config_path=_Test_Config, app_server=FakeWebServer(), auto_setup=True)
+
+            assert re.search(r"not be empty", str(exc_info.value), re.IGNORECASE)
+            mock_load_config.assert_called_once_with(path=_Test_Config)
+            mock_create_apis.assert_not_called()
+
     @patch("fake_api_server.server.mock.load_config", return_value=mock_api_config)
     @patch.object(FakeWebServer, "create_api")
     def test_create_apis(self, mock_create_apis: Mock, mock_load_config: Mock):
@@ -153,8 +171,8 @@ class TestMockHTTPServer:
                     mock_create_apis.assert_not_called()
 
         # Mock functions and objects
-        mock_api_config = Mock(
-            FakeAPIConfig(name=Mock(), description=Mock(), apis=Mock(MockAPIs(base=Mock(), apis=Mock())))
+        mock_api_config = FakeAPIConfig(
+            name=Mock(), description=Mock(), apis=MockAPIs(base=Mock(), apis={"dummy-api-key": MockAPI()})
         )
         # Note: About patch to the function in __init__ module of sub-package
         # pylint: disable=line-too-long
