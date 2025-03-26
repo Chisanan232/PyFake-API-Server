@@ -145,6 +145,21 @@ class TestFakeAPIConfig(CheckableTestSuite):
     def test_is_work(self, sut_with_nothing: FakeAPIConfig, test_data_path: str, criteria: bool):
         super().test_is_work(sut_with_nothing, test_data_path, criteria)
 
+    @pytest.mark.parametrize(
+        "data",
+        [
+            FakeAPIConfig(),
+            FakeAPIConfig(apis=MockAPIs()),
+            FakeAPIConfig(apis=MockAPIs(apis={})),
+        ],
+    )
+    def test_is_empty_when_no_value(self, data: FakeAPIConfig):
+        assert data.is_empty() is True, "It should be 'True' if its property *apis* has no value."
+
+    def test_is_empty_when_has_value(self, sut_with_nothing: FakeAPIConfig):
+        sut_with_nothing.apis = MockAPIs(apis={"test-api-key": MockAPI()})
+        assert sut_with_nothing.is_empty() is False, "It should be 'False' if its property *apis* has value."
+
     @patch("fake_api_server._utils.file.operation.YAML.read", return_value=_TestConfig.API_Config)
     def test_from_yaml_file(self, mock_read_yaml: Mock, sut: FakeAPIConfig):
         config = sut.from_yaml(path="test-api.yaml")
@@ -349,6 +364,13 @@ class TestMockAPIs(CheckableTestSuite, DividableTestSuite):
     )
     def test_is_work(self, sut_with_nothing: MockAPIs, test_data_path: str, criteria: bool):
         super().test_is_work(sut_with_nothing, test_data_path, criteria)
+
+    def test_is_empty_when_no_value(self, sut_with_nothing: MockAPIs):
+        assert sut_with_nothing.is_empty() is True, "It should be 'True' if its property *apis* has no value."
+
+    def test_is_empty_when_has_value(self, sut_with_nothing: MockAPIs):
+        sut_with_nothing.apis = {"test-api-key": MockAPI()}
+        assert sut_with_nothing.is_empty() is False, "It should be 'False' if its property *apis* has value."
 
     def test_get_api_config_by_url(self, sut: MockAPIs):
         api_config = sut.get_api_config_by_url(url=_Test_URL)
