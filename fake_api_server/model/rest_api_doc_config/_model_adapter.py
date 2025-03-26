@@ -37,7 +37,7 @@ class FormatAdapter(BaseFormatModelAdapter):
         def _configure_customize(customize: str, value_format: ValueFormat) -> Tuple[str, List[Variable]]:
             cust = customize
             var = [Variable(name=cust, value_format=value_format)]
-            return cust, var
+            return f"<{cust}>", var
 
         if self.enum:
             return PyFake_Format(
