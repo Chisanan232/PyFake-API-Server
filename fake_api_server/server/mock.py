@@ -48,7 +48,9 @@ class MockHTTPServer:
         self._app_server = app_server
         self._web_application = None
 
-        if auto_setup and (self._api_config and self._api_config.apis):
+        if auto_setup:
+            if self._api_config is None or self._api_config.apis is None or not self._api_config.apis.apis:
+                raise ValueError("The mocked APIs configuration must not be empty.")
             self.create_apis(mocked_apis=self._api_config.apis)
 
     @property
