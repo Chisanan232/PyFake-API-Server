@@ -112,7 +112,7 @@ mocked_apis:
               type: str
               format:
                 strategy: customize
-                customize: uri_value
+                customize: <uri_value>
                 variables:
                   - name: uri_value
                     value_format: "uri"
@@ -121,7 +121,7 @@ mocked_apis:
               type: str
               format:
                 strategy: customize
-                customize: url_value
+                customize: <url_value>
                 variables:
                   - name: url_value
                     value_format: "url"

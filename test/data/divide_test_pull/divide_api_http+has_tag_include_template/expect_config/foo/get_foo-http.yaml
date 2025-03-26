@@ -6,7 +6,7 @@ request:
       type: str
       format:
         strategy: customize
-        customize: datetime_value
+        customize: <datetime_value>
         variables:
           - name: datetime_value
             value_format: "date-time"
