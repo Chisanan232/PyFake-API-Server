@@ -171,8 +171,8 @@ class TestMockHTTPServer:
                     mock_create_apis.assert_not_called()
 
         # Mock functions and objects
-        mock_api_config = Mock(
-            FakeAPIConfig(name=Mock(), description=Mock(), apis=Mock(MockAPIs(base=Mock(), apis=Mock())))
+        mock_api_config = FakeAPIConfig(
+            name=Mock(), description=Mock(), apis=MockAPIs(base=Mock(), apis={"dummy-api-key": MockAPI()})
         )
         # Note: About patch to the function in __init__ module of sub-package
         # pylint: disable=line-too-long
