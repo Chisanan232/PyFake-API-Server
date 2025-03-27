@@ -145,6 +145,10 @@ _Test_Response_Property_General_Format: dict = {
 }
 
 # The expect value it should generate: ENUM2
+_General_Static_Format: dict = {
+    "strategy": "static_value",
+    "static_value": "fixed_string_value",
+}
 _General_Enum_Format: dict = {
     "strategy": "from_enums",
     "enums": ["ENUM1", "ENUM2", "ENUM3"],
@@ -254,6 +258,13 @@ _Test_API_Parameter_With_General_Format_Float: dict = {
     "default": None,
     "type": "float",
     "format": _General_Format,
+}
+_Test_API_Parameter_With_Static_Format: dict = {
+    "name": "format_param",
+    "required": True,
+    "default": None,
+    "type": "str",
+    "format": _General_Static_Format,
 }
 _Test_API_Parameter_With_Enum_Format: dict = {
     "name": "format_param",
@@ -560,6 +571,20 @@ _Test_Home_With_General_Format_Req_Param: dict = {
 }
 
 # API has parameters which have format setting
+_Test_Home_With_Static_Format_Req_Param: dict = {
+    "url": "/test/verify-static-format-req-param",
+    "http": {
+        "request": {
+            "method": "DELETE",
+            "parameters": [_Test_API_Parameter_With_Static_Format],
+        },
+        "response": {
+            "strategy": "string",
+            "value": '{ "responseCode": "200", "errorMessage": "OK", "content": "This is Test home." }',
+        },
+    },
+    "cookie": [{"TEST": "cookie_value"}],
+}
 _Test_Home_With_Enums_Format_Req_Param: dict = {
     "url": "/test/verify-enums-format-req-param",
     "http": {
