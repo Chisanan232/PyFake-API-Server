@@ -141,7 +141,11 @@ class ValueFormat(Enum):
         elif self is ValueFormat.Date:
             return r"\d{4}-\d{1,2}-\d{1,2}"
         elif self is ValueFormat.DateTime:
-            return r"\d{4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{1,2}:\d{1,2}Z?"
+            iso_format = r"\d{4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{1,2}:\d{1,2}Z?"
+            unix_seconds_format = r"\d{10,11}"
+            unix_milliseconds_format = r"\d{13,14}"
+            all_datetime_formats = r"|".join([iso_format, unix_seconds_format, unix_milliseconds_format])
+            return r"(" + all_datetime_formats + r")"
         elif self is ValueFormat.Enum:
             return r"(" + r"|".join([re.escape(e) for e in enums]) + r")"
         elif self is ValueFormat.EMail:
