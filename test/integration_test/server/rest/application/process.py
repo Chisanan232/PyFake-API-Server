@@ -35,6 +35,7 @@ from test._values import (
     _Test_Home_With_Customize_Format_Req_Param,
     _Test_Home_With_Enums_Format_Req_Param,
     _Test_Home_With_General_Format_Req_Param,
+    _Test_Home_With_Static_Format_Req_Param,
 )
 
 # isort: on
@@ -151,6 +152,8 @@ class HTTPProcessTestSpec(metaclass=ABCMeta):
                 None,
                 200,
             ),
+            # Valid request with static value format strategy
+            ("/test-api-req-param-format", "DELETE", {"format_param": "fixed_string_value"}, None, 200),
             # Valid request with enum format strategy
             ("/test-api-req-param-format", "POST", {"format_param": "ENUM2"}, None, 200),
             # Valid request with customize format strategy
@@ -175,6 +178,14 @@ class HTTPProcessTestSpec(metaclass=ABCMeta):
                 "GET",
                 {"format_param_str": "string_value", "format_param_float": "not big decimal value"},
                 ["type of data", "is different"],
+                400,
+            ),
+            # Invalid request with static value format strategy
+            (
+                "/test-api-req-param-format",
+                "DELETE",
+                {"format_param": "dynamic_value"},
+                ["format should be", "fixed value"],
                 400,
             ),
             # Invalid request with enum format strategy
@@ -237,6 +248,9 @@ class HTTPProcessTestSpec(metaclass=ABCMeta):
             "/test-api-req-param-format": {
                 _Test_Home_With_General_Format_Req_Param["http"]["request"]["method"]: MockAPI().deserialize(
                     _Test_Home_With_General_Format_Req_Param
+                ),
+                _Test_Home_With_Static_Format_Req_Param["http"]["request"]["method"]: MockAPI().deserialize(
+                    _Test_Home_With_Static_Format_Req_Param
                 ),
                 _Test_Home_With_Enums_Format_Req_Param["http"]["request"]["method"]: MockAPI().deserialize(
                     _Test_Home_With_Enums_Format_Req_Param

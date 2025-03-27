@@ -1255,6 +1255,10 @@ class TestFormatWithCustomizeStrategy(TestFormatWithGeneralStrategy, CheckableTe
             (FormatStrategy.BY_DATA_TYPE, int, None, [], "", "", [], [], int, None),
             (FormatStrategy.BY_DATA_TYPE, "big_decimal", None, [], "", "", [], [], Decimal, None),
             (FormatStrategy.BY_DATA_TYPE, bool, None, [], "", "", [], [], bool, None),
+            (FormatStrategy.STATIC_VALUE, str, "static_string_value", [], "", "", [], [], str, "static_string_value"),
+            (FormatStrategy.STATIC_VALUE, int, 123, [], "", "", [], [], int, str(123)),
+            (FormatStrategy.STATIC_VALUE, list, [1, 2, 3], [], "", "", [], [], list, str([1, 2, 3])),
+            (FormatStrategy.STATIC_VALUE, dict, {"key1": "value1"}, [], "", "", [], [], dict, str({"key1": "value1"})),
             (FormatStrategy.FROM_ENUMS, str, None, ["ENUM_1", "ENUM_2", "ENUM_3"], "", "", [], [], str, None),
             # General customize
             (
@@ -1283,6 +1287,34 @@ class TestFormatWithCustomizeStrategy(TestFormatWithGeneralStrategy, CheckableTe
                 [],
                 str,
                 r"\d{0,64}(\.)\d{0,64} \w{0,10}",
+            ),
+            # General customize
+            (
+                FormatStrategy.CUSTOMIZE,
+                str,
+                None,
+                [],
+                "<big_decimal_price> <fiat_currency_code>",
+                "",
+                [
+                    Variable(
+                        name="big_decimal_price",
+                        value_format=ValueFormat.BigDecimal,
+                        digit=Digit(),
+                        size=Size(),
+                        enum=[],
+                    ),
+                    Variable(
+                        name="fiat_currency_code",
+                        value_format=ValueFormat.Static,
+                        digit=Digit(),
+                        size=Size(),
+                        static_value="USD",
+                    ),
+                ],
+                [],
+                str,
+                r"\d{0,64}(\.)\d{0,64} USD",
             ),
             # General from_template (format case)
             (
