@@ -295,10 +295,12 @@ class TestFormatStrategy(EnumTestSuite):
         "value",
         [
             FormatStrategy.BY_DATA_TYPE,
+            FormatStrategy.STATIC_VALUE,
             FormatStrategy.FROM_ENUMS,
             FormatStrategy.CUSTOMIZE,
             FormatStrategy.FROM_TEMPLATE,
             "by_data_type",
+            "static_value",
             "from_enums",
             "customize",
             "from_template",
