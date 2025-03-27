@@ -45,7 +45,7 @@ class ValueFormat(Enum):
     IPv6 = "ipv6"
 
     @property
-    def _nothin_need_to_check(self) -> List["ValueFormat"]:
+    def _nothing_need_to_check(self) -> List["ValueFormat"]:
         return [
             ValueFormat.Date,
             ValueFormat.DateTime,
@@ -195,7 +195,7 @@ class ValueFormat(Enum):
             assert (
                 digit.decimal >= 0
             ), f"The digit number of decimal part must be greater or equal to 0. digit.decimal: {digit.decimal}."
-        elif self in self._nothin_need_to_check:
+        elif self in self._nothing_need_to_check:
             # TODO: Add some settings for datetime value
             assert True
         elif self is ValueFormat.Static:
