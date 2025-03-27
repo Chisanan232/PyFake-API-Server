@@ -241,32 +241,48 @@ class TestValueFormat(EnumTestSuite):
         assert regex == expect_regex
 
     @pytest.mark.parametrize(
-        ("formatter", "invalid_enums", "invalid_size", "invalid_digit", "expect_err_msg"),
+        ("formatter", "invalid_static", "invalid_enums", "invalid_size", "invalid_digit", "expect_err_msg"),
         [
-            (ValueFormat.String, None, None, None, r"must not be empty"),
-            (ValueFormat.String, None, ValueSize(max=0, min=0), None, r"must be greater than 0"),
-            (ValueFormat.String, None, ValueSize(max=-1, min=0), None, r"must be greater than 0"),
-            (ValueFormat.String, None, ValueSize(max=3, min=-1), None, r"must be greater or equal to 0"),
-            (ValueFormat.Integer, None, None, None, r"must not be empty"),
-            (ValueFormat.Integer, None, None, DigitRange(integer=-2, decimal=0), r"must be greater than 0"),
-            (ValueFormat.BigDecimal, None, None, None, r"must not be empty"),
-            (ValueFormat.BigDecimal, None, None, DigitRange(integer=-2, decimal=0), r"must be greater or equal to 0"),
-            (ValueFormat.BigDecimal, None, None, DigitRange(integer=1, decimal=-3), r"must be greater or equal to 0"),
-            (ValueFormat.Enum, None, None, None, r"must not be empty"),
-            (ValueFormat.Enum, [], None, None, r"must not be empty"),
-            (ValueFormat.Enum, [123], None, None, r"must be string"),
+            (ValueFormat.String, None, None, None, None, r"must not be empty"),
+            (ValueFormat.String, None, None, ValueSize(max=0, min=0), None, r"must be greater than 0"),
+            (ValueFormat.String, None, None, ValueSize(max=-1, min=0), None, r"must be greater than 0"),
+            (ValueFormat.String, None, None, ValueSize(max=3, min=-1), None, r"must be greater or equal to 0"),
+            (ValueFormat.Integer, None, None, None, None, r"must not be empty"),
+            (ValueFormat.Integer, None, None, None, DigitRange(integer=-2, decimal=0), r"must be greater than 0"),
+            (ValueFormat.BigDecimal, None, None, None, None, r"must not be empty"),
+            (
+                ValueFormat.BigDecimal,
+                None,
+                None,
+                None,
+                DigitRange(integer=-2, decimal=0),
+                r"must be greater or equal to 0",
+            ),
+            (
+                ValueFormat.BigDecimal,
+                None,
+                None,
+                None,
+                DigitRange(integer=1, decimal=-3),
+                r"must be greater or equal to 0",
+            ),
+            (ValueFormat.Static, None, None, None, None, r"must not be empty"),
+            (ValueFormat.Enum, None, None, None, None, r"must not be empty"),
+            (ValueFormat.Enum, None, [], None, None, r"must not be empty"),
+            (ValueFormat.Enum, None, [123], None, None, r"must be string"),
         ],
     )
     def test_failure_generate_regex(
         self,
         formatter: ValueFormat,
+        invalid_static: Optional[Union[str, int, list, dict]],
         invalid_enums: Optional[List[str]],
         invalid_size: Optional[ValueSize],
         invalid_digit: Optional[DigitRange],
         expect_err_msg: str,
     ):
         with pytest.raises(AssertionError) as exc_info:
-            formatter.generate_regex(enums=invalid_enums, size=invalid_size, digit=invalid_digit)
+            formatter.generate_regex(static=invalid_static, enums=invalid_enums, size=invalid_size, digit=invalid_digit)
         assert re.search(expect_err_msg, str(exc_info.value), re.IGNORECASE)
 
 
