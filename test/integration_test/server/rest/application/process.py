@@ -182,7 +182,7 @@ class HTTPProcessTestSpec(metaclass=ABCMeta):
                 "/test-api-req-param-format",
                 "POST",
                 {"format_param": "NOT_EXIST_ENUM"},
-                ["format should be", "oen of the enums value"],
+                ["format should be", "one of the enums value"],
                 400,
             ),
             # Invalid request with customize format strategy
