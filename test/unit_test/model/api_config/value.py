@@ -147,7 +147,7 @@ class TestValueFormat(EnumTestSuite):
                 [],
                 None,
                 None,
-                r"(\d{4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{1,2}:\d{1,2}Z?|\d{10,11}|\d{13,14})",
+                r"(\d{4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{1,2}:\d{1,2}Z?|^[+]?\d{10,11}|^[+]?\d{13,14})",
             ),
             (
                 ValueFormat.String,
