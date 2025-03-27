@@ -455,6 +455,66 @@ class TestFormatWithCustomizeStrategy(TestFormatWithGeneralStrategy, CheckableTe
                 FormatStrategy.CUSTOMIZE,
                 "",
                 str,
+                "static_string_value",
+                "<static_check>",
+                [],
+                [
+                    Variable(
+                        name="static_check",
+                        value_format=ValueFormat.Static,
+                        static_value="static_string_value",
+                    )
+                ],
+            ),
+            (
+                FormatStrategy.CUSTOMIZE,
+                "",
+                int,
+                123456,
+                "<static_check>",
+                [],
+                [
+                    Variable(
+                        name="static_check",
+                        value_format=ValueFormat.Static,
+                        static_value=123456,
+                    )
+                ],
+            ),
+            (
+                FormatStrategy.CUSTOMIZE,
+                "",
+                list,
+                ["ele1", "ele2"],
+                "<static_check>",
+                [],
+                [
+                    Variable(
+                        name="static_check",
+                        value_format=ValueFormat.Static,
+                        static_value=["ele1", "ele2"],
+                    )
+                ],
+            ),
+            (
+                FormatStrategy.CUSTOMIZE,
+                "",
+                dict,
+                {"key1": "value1"},
+                "<static_check>",
+                [],
+                [
+                    Variable(
+                        name="static_check",
+                        value_format=ValueFormat.Static,
+                        static_value={"key1": "value1"},
+                    )
+                ],
+            ),
+            (
+                FormatStrategy.CUSTOMIZE,
+                "",
+                str,
                 "ENUM_3",
                 "<enum_check>",
                 [],
@@ -918,6 +978,66 @@ class TestFormatWithCustomizeStrategy(TestFormatWithGeneralStrategy, CheckableTe
                 FormatStrategy.CUSTOMIZE,
                 "",
                 str,
+                "dymanic_string_value",
+                "<static_check>",
+                [],
+                [
+                    Variable(
+                        name="static_check",
+                        value_format=ValueFormat.Static,
+                        static_value="static_string_value",
+                    )
+                ],
+            ),
+            (
+                FormatStrategy.CUSTOMIZE,
+                "",
+                int,
+                123,
+                "<static_check>",
+                [],
+                [
+                    Variable(
+                        name="static_check",
+                        value_format=ValueFormat.Static,
+                        static_value=123456,
+                    )
+                ],
+            ),
+            (
+                FormatStrategy.CUSTOMIZE,
+                "",
+                list,
+                ["ele1", "not exist or different element"],
+                "<static_check>",
+                [],
+                [
+                    Variable(
+                        name="static_check",
+                        value_format=ValueFormat.Static,
+                        static_value=["ele1", "ele2"],
+                    )
+                ],
+            ),
+            (
+                FormatStrategy.CUSTOMIZE,
+                "",
+                dict,
+                {"not exist or different key": "value1"},
+                "<static_check>",
+                [],
+                [
+                    Variable(
+                        name="static_check",
+                        value_format=ValueFormat.Static,
+                        static_value={"key1": "value1"},
+                    )
+                ],
+            ),
+            (
+                FormatStrategy.CUSTOMIZE,
+                "",
+                str,
                 "ENUM_NOT_EXIST",
                 "<enum_check>",
                 [],
@@ -1074,11 +1194,18 @@ class TestFormatWithCustomizeStrategy(TestFormatWithGeneralStrategy, CheckableTe
         assert format_model.value_format_is_match(data_type=data_type, value=value) is False
 
     def _given_format_config(
-        self, strategy: FormatStrategy, customize: str, variables: List[Variable], use_name: str, enums: List[str] = []
+        self,
+        strategy: FormatStrategy,
+        customize: str,
+        variables: List[Variable],
+        use_name: str,
+        enums: List[str] = [],
+        static_value: Optional[Union[str, int, list, dict]] = None,
     ) -> Format:
         return Format(
             strategy=strategy,
             size=Size(max_value=64, min_value=0),
+            static_value=static_value,
             enums=enums,
             customize=customize if strategy is FormatStrategy.CUSTOMIZE else "",
             variables=variables,
@@ -1114,6 +1241,7 @@ class TestFormatWithCustomizeStrategy(TestFormatWithGeneralStrategy, CheckableTe
         (
             "strategy",
             "data_type",
+            "static_value",
             "enums",
             "customize",
             "use_name",
@@ -1123,15 +1251,16 @@ class TestFormatWithCustomizeStrategy(TestFormatWithGeneralStrategy, CheckableTe
             "expect_value_format",
         ),
         [
-            (FormatStrategy.BY_DATA_TYPE, str, [], "", "", [], [], str, None),
-            (FormatStrategy.BY_DATA_TYPE, int, [], "", "", [], [], int, None),
-            (FormatStrategy.BY_DATA_TYPE, "big_decimal", [], "", "", [], [], Decimal, None),
-            (FormatStrategy.BY_DATA_TYPE, bool, [], "", "", [], [], bool, None),
-            (FormatStrategy.FROM_ENUMS, str, ["ENUM_1", "ENUM_2", "ENUM_3"], "", "", [], [], str, None),
+            (FormatStrategy.BY_DATA_TYPE, str, None, [], "", "", [], [], str, None),
+            (FormatStrategy.BY_DATA_TYPE, int, None, [], "", "", [], [], int, None),
+            (FormatStrategy.BY_DATA_TYPE, "big_decimal", None, [], "", "", [], [], Decimal, None),
+            (FormatStrategy.BY_DATA_TYPE, bool, None, [], "", "", [], [], bool, None),
+            (FormatStrategy.FROM_ENUMS, str, None, ["ENUM_1", "ENUM_2", "ENUM_3"], "", "", [], [], str, None),
             # General customize
             (
                 FormatStrategy.CUSTOMIZE,
                 str,
+                None,
                 [],
                 "<big_decimal_price> <fiat_currency_code>",
                 "",
@@ -1159,6 +1288,7 @@ class TestFormatWithCustomizeStrategy(TestFormatWithGeneralStrategy, CheckableTe
             (
                 FormatStrategy.FROM_TEMPLATE,
                 str,
+                None,
                 [],
                 "<big_decimal_price> <fiat_currency_code>",
                 "sample_customize",
@@ -1186,6 +1316,7 @@ class TestFormatWithCustomizeStrategy(TestFormatWithGeneralStrategy, CheckableTe
             (
                 FormatStrategy.FROM_TEMPLATE,
                 str,
+                None,
                 [],
                 "<big_decimal_price> <fiat_currency_code>",
                 "",
@@ -1213,6 +1344,7 @@ class TestFormatWithCustomizeStrategy(TestFormatWithGeneralStrategy, CheckableTe
             (
                 FormatStrategy.CUSTOMIZE,
                 str,
+                None,
                 [],
                 "<big_decimal_price> <fiat_currency_code>",
                 "",
@@ -1240,6 +1372,7 @@ class TestFormatWithCustomizeStrategy(TestFormatWithGeneralStrategy, CheckableTe
             (
                 FormatStrategy.CUSTOMIZE,
                 str,
+                None,
                 [],
                 "<big_decimal_price> <fiat_currency_code>",
                 "",
@@ -1270,6 +1403,7 @@ class TestFormatWithCustomizeStrategy(TestFormatWithGeneralStrategy, CheckableTe
         self,
         strategy: FormatStrategy,
         data_type: Union[None, str, object],
+        static_value: Optional[Union[str, int, list, dict]],
         enums: List[str],
         customize: str,
         use_name: str,
@@ -1281,6 +1415,7 @@ class TestFormatWithCustomizeStrategy(TestFormatWithGeneralStrategy, CheckableTe
         # Given under test format
         format_model = self._given_format_config(
             strategy=strategy,
+            static_value=static_value,
             enums=enums,
             customize=customize,
             use_name=use_name,
