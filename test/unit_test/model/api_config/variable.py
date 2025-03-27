@@ -160,6 +160,7 @@ class TestVariable(CheckableTestSuite):
             value_format=_Test_Variables_BigDecimal_USD["value_format"],
             digit=_Test_Variables_BigDecimal_USD["digit"],
             size=_Test_Variables_BigDecimal_USD["size"],
+            static_value=_Test_Variables_BigDecimal_USD["static_value"],
             enum=_Test_Variables_BigDecimal_USD["enum"],
         )
 
@@ -172,6 +173,7 @@ class TestVariable(CheckableTestSuite):
         assert sut.value_format.value is _Test_Variables_BigDecimal_USD["value_format"], _assertion_msg
         assert sut.digit.serialize() == _Test_Variables_BigDecimal_USD["digit"], _assertion_msg
         assert sut.size.serialize() == _Test_Variables_BigDecimal_USD["size"], _assertion_msg
+        assert sut.static_value == _Test_Variables_BigDecimal_USD["static_value"], _assertion_msg
         assert sut.enum == _Test_Variables_BigDecimal_USD["enum"], _assertion_msg
 
     def _expected_serialize_value(self) -> Any:
@@ -183,6 +185,7 @@ class TestVariable(CheckableTestSuite):
         assert obj.value_format.value is _Test_Variables_BigDecimal_USD["value_format"]
         assert obj.digit.serialize() == _Test_Variables_BigDecimal_USD["digit"]
         assert obj.size.serialize() == _Test_Variables_BigDecimal_USD["size"]
+        assert obj.static_value == _Test_Variables_BigDecimal_USD["static_value"], _assertion_msg
         assert obj.enum == _Test_Variables_BigDecimal_USD["enum"]
 
     def test_key(self, sut: Variable):
@@ -201,6 +204,7 @@ class TestVariableWithEnumFormat(CheckableTestSuite):
             value_format=_Test_Variables_Currency_Code["value_format"],
             digit=_Test_Variables_Currency_Code["digit"],
             size=_Test_Variables_Currency_Code["size"],
+            static_value=_Test_Variables_Currency_Code["static_value"],
             enum=_Test_Variables_Currency_Code["enum"],
         )
 
@@ -213,6 +217,7 @@ class TestVariableWithEnumFormat(CheckableTestSuite):
         assert sut.value_format.value is _Test_Variables_Currency_Code["value_format"], _assertion_msg
         assert sut.digit == _Test_Variables_Currency_Code["digit"], _assertion_msg
         assert sut.size == _Test_Variables_Currency_Code["size"], _assertion_msg
+        assert sut.static_value == _Test_Variables_Currency_Code["static_value"], _assertion_msg
         assert sut.enum == _Test_Variables_Currency_Code["enum"], _assertion_msg
 
     def _expected_serialize_value(self) -> Any:
@@ -224,6 +229,7 @@ class TestVariableWithEnumFormat(CheckableTestSuite):
         assert obj.value_format.value is _Test_Variables_Currency_Code["value_format"]
         assert obj.digit == _Test_Variables_Currency_Code["digit"]
         assert obj.size == _Test_Variables_Currency_Code["size"]
+        assert obj.static_value == _Test_Variables_Currency_Code["static_value"], _assertion_msg
         assert obj.enum == _Test_Variables_Currency_Code["enum"]
 
     @pytest.mark.parametrize(

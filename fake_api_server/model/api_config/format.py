@@ -98,6 +98,7 @@ class Format(_Config, _Checkable):
             self.strategy == other.strategy
             and self.digit == other.digit
             and self.size == other.size
+            and self.static_value == other.static_value
             and self.enums == other.enums
             and self.customize == other.customize
             and variables_prop_is_same
@@ -240,7 +241,10 @@ class Format(_Config, _Checkable):
                 if size is None:
                     size = Size()
                 one_var_regex = find_result[0].value_format.generate_regex(
-                    enums=find_result[0].enum or [], size=size.to_value_size(), digit=digit.to_digit_range()
+                    static=find_result[0].static_value,
+                    enums=find_result[0].enum or [],
+                    size=size.to_value_size(),
+                    digit=digit.to_digit_range(),
                 )
                 regex = regex.replace(var, one_var_regex)
             return re.search(regex, str(value), re.IGNORECASE) is not None
