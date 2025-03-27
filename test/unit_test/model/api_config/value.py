@@ -28,6 +28,7 @@ class TestValueFormat(EnumTestSuite):
             ValueFormat.Integer,
             ValueFormat.BigDecimal,
             ValueFormat.Boolean,
+            ValueFormat.Static,
             ValueFormat.Enum,
             "date",
             "date-time",
@@ -35,6 +36,7 @@ class TestValueFormat(EnumTestSuite):
             "int",
             "big_decimal",
             "bool",
+            "static",
             "enum",
             str,
             int,
@@ -77,6 +79,24 @@ class TestValueFormat(EnumTestSuite):
             assert value in enums
 
     @pytest.mark.parametrize(
+        ("formatter", "static", "expect_type"),
+        [
+            (ValueFormat.Static, "fixed_value", str),
+            (ValueFormat.Static, 123, int),
+            (ValueFormat.Static, [], list),
+            (ValueFormat.Static, ["test1", "test2"], list),
+            (ValueFormat.Static, {}, dict),
+            (ValueFormat.Static, {"key1": "value1", "key2": "value2"}, dict),
+        ],
+    )
+    def test_generate_static_value(
+        self, formatter: ValueFormat, static: Optional[Union[str, int, list, dict]], expect_type: object
+    ):
+        value = formatter.generate_value(static=static)
+        assert value is not None
+        assert isinstance(value, expect_type)
+
+    @pytest.mark.parametrize(
         ("formatter", "size", "expect_type"),
         [
             (ValueFormat.String, ValueSize(max=3, min=0), str),
@@ -110,40 +130,57 @@ class TestValueFormat(EnumTestSuite):
         Verify.numerical_value_should_be_in_range(value=value, expect_range=expect_range)
 
     @pytest.mark.parametrize(
-        ("formatter", "invalid_enums", "invalid_size", "invalid_digit", "expect_err_msg"),
+        ("formatter", "invalid_static", "invalid_enums", "invalid_size", "invalid_digit", "expect_err_msg"),
         [
-            (ValueFormat.String, None, None, None, r"must not be empty"),
-            (ValueFormat.String, None, ValueSize(max=0, min=0), None, r"must be greater than 0"),
-            (ValueFormat.String, None, ValueSize(max=-1, min=0), None, r"must be greater than 0"),
-            (ValueFormat.String, None, ValueSize(max=3, min=-1), None, r"must be greater or equal to 0"),
-            (ValueFormat.Integer, None, None, None, r"must not be empty"),
-            (ValueFormat.Integer, None, None, DigitRange(integer=-2, decimal=0), r"must be greater than 0"),
-            (ValueFormat.BigDecimal, None, None, None, r"must not be empty"),
-            (ValueFormat.BigDecimal, None, None, DigitRange(integer=-2, decimal=0), r"must be greater or equal to 0"),
-            (ValueFormat.BigDecimal, None, None, DigitRange(integer=1, decimal=-3), r"must be greater or equal to 0"),
-            (ValueFormat.Enum, None, None, None, r"must not be empty"),
-            (ValueFormat.Enum, [], None, None, r"must not be empty"),
-            (ValueFormat.Enum, [123], None, None, r"must be string"),
+            (ValueFormat.String, None, None, None, None, r"must not be empty"),
+            (ValueFormat.String, None, None, ValueSize(max=0, min=0), None, r"must be greater than 0"),
+            (ValueFormat.String, None, None, ValueSize(max=-1, min=0), None, r"must be greater than 0"),
+            (ValueFormat.String, None, None, ValueSize(max=3, min=-1), None, r"must be greater or equal to 0"),
+            (ValueFormat.Integer, None, None, None, None, r"must not be empty"),
+            (ValueFormat.Integer, None, None, None, DigitRange(integer=-2, decimal=0), r"must be greater than 0"),
+            (ValueFormat.BigDecimal, None, None, None, None, r"must not be empty"),
+            (
+                ValueFormat.BigDecimal,
+                None,
+                None,
+                None,
+                DigitRange(integer=-2, decimal=0),
+                r"must be greater or equal to 0",
+            ),
+            (
+                ValueFormat.BigDecimal,
+                None,
+                None,
+                None,
+                DigitRange(integer=1, decimal=-3),
+                r"must be greater or equal to 0",
+            ),
+            (ValueFormat.Static, None, None, None, None, r"must not be empty"),
+            (ValueFormat.Enum, None, None, None, None, r"must not be empty"),
+            (ValueFormat.Enum, None, [], None, None, r"must not be empty"),
+            (ValueFormat.Enum, None, [123], None, None, r"must be string"),
         ],
     )
     def test_failure_generate_value(
         self,
         formatter: ValueFormat,
+        invalid_static: Optional[Union[str, list, dict]],
         invalid_enums: Optional[List[str]],
         invalid_size: Optional[ValueSize],
         invalid_digit: Optional[DigitRange],
         expect_err_msg: str,
     ):
         with pytest.raises(AssertionError) as exc_info:
-            formatter.generate_value(enums=invalid_enums, size=invalid_size, digit=invalid_digit)
+            formatter.generate_value(static=invalid_static, enums=invalid_enums, size=invalid_size, digit=invalid_digit)
         assert re.search(expect_err_msg, str(exc_info.value), re.IGNORECASE)
 
     @pytest.mark.parametrize(
-        ("formatter", "enums", "size", "digit_range", "expect_regex"),
+        ("formatter", "static", "enums", "size", "digit_range", "expect_regex"),
         [
-            (ValueFormat.Date, [], None, None, r"\d{4}-\d{1,2}-\d{1,2}"),
+            (ValueFormat.Date, None, [], None, None, r"\d{4}-\d{1,2}-\d{1,2}"),
             (
                 ValueFormat.DateTime,
+                None,
                 [],
                 None,
                 None,
@@ -151,6 +188,7 @@ class TestValueFormat(EnumTestSuite):
             ),
             (
                 ValueFormat.String,
+                None,
                 [],
                 ValueSize(max=3, min=0),
                 None,
@@ -158,25 +196,31 @@ class TestValueFormat(EnumTestSuite):
             ),
             (
                 ValueFormat.String,
+                None,
                 [],
                 ValueSize(max=128, min=5),
                 None,
                 r"[@\-_!#$%^&+*()\[\]<>?=/\\|`'\"}{~:;,.\w\s]{5,128}",
             ),
-            (ValueFormat.Integer, [], None, DigitRange(integer=3, decimal=0), r"\d{1,3}"),
-            (ValueFormat.Integer, [], None, DigitRange(integer=3, decimal=2), r"\d{1,3}"),
-            (ValueFormat.Integer, [], None, DigitRange(integer=10, decimal=2), r"\d{1,10}"),
-            (ValueFormat.BigDecimal, [], None, DigitRange(integer=4, decimal=0), r"\d{1,4}\.?\d{0,0}"),
-            (ValueFormat.BigDecimal, [], None, DigitRange(integer=4, decimal=2), r"\d{1,4}\.?\d{0,2}"),
-            (ValueFormat.BigDecimal, [], None, DigitRange(integer=10, decimal=3), r"\d{1,10}\.?\d{0,3}"),
-            (ValueFormat.Enum, ["ENUM_1", "ENUM_2", "ENUM_3"], None, None, r"(ENUM_1|ENUM_2|ENUM_3)"),
-            (ValueFormat.EMail, [], None, None, r"\w{1,124}@(gmail|outlook|yahoo).com"),
-            (ValueFormat.UUID, [], None, None, r"\w{8}-\w{4}-\w{4}-\w{4}-\w{12}"),
-            (ValueFormat.URI, [], None, None, r"https://www\.(\w{1,24}|\.){1,7}\.(com|org)"),
-            (ValueFormat.URL, [], None, None, r"https://www\.(\w{1,24}|\.){1,7}\.(com|org)"),
-            (ValueFormat.IPv4, [], None, None, r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"),
+            (ValueFormat.Integer, None, [], None, DigitRange(integer=3, decimal=0), r"\d{1,3}"),
+            (ValueFormat.Integer, None, [], None, DigitRange(integer=3, decimal=2), r"\d{1,3}"),
+            (ValueFormat.Integer, None, [], None, DigitRange(integer=10, decimal=2), r"\d{1,10}"),
+            (ValueFormat.BigDecimal, None, [], None, DigitRange(integer=4, decimal=0), r"\d{1,4}\.?\d{0,0}"),
+            (ValueFormat.BigDecimal, None, [], None, DigitRange(integer=4, decimal=2), r"\d{1,4}\.?\d{0,2}"),
+            (ValueFormat.BigDecimal, None, [], None, DigitRange(integer=10, decimal=3), r"\d{1,10}\.?\d{0,3}"),
+            (ValueFormat.Static, "string_value", [], None, None, r"string_value"),
+            (ValueFormat.Static, 123, [], None, None, r"123"),
+            (ValueFormat.Static, ["ele1", "ele2"], [], None, None, re.escape(str(["ele1", "ele2"]))),
+            (ValueFormat.Static, {"key1": "value1"}, [], None, None, re.escape(str({"key1": "value1"}))),
+            (ValueFormat.Enum, None, ["ENUM_1", "ENUM_2", "ENUM_3"], None, None, r"(ENUM_1|ENUM_2|ENUM_3)"),
+            (ValueFormat.EMail, None, [], None, None, r"\w{1,124}@(gmail|outlook|yahoo).com"),
+            (ValueFormat.UUID, None, [], None, None, r"\w{8}-\w{4}-\w{4}-\w{4}-\w{12}"),
+            (ValueFormat.URI, None, [], None, None, r"https://www\.(\w{1,24}|\.){1,7}\.(com|org)"),
+            (ValueFormat.URL, None, [], None, None, r"https://www\.(\w{1,24}|\.){1,7}\.(com|org)"),
+            (ValueFormat.IPv4, None, [], None, None, r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"),
             (
                 ValueFormat.IPv6,
+                None,
                 [],
                 None,
                 None,
@@ -187,12 +231,13 @@ class TestValueFormat(EnumTestSuite):
     def test_generate_regex(
         self,
         formatter: ValueFormat,
+        static: Optional[Union[str, int, list, dict]],
         enums: List[str],
         size: Optional[ValueSize],
         digit_range: Optional[DigitRange],
         expect_regex: str,
     ):
-        regex = formatter.generate_regex(enums=enums, size=size, digit=digit_range)
+        regex = formatter.generate_regex(static=static, enums=enums, size=size, digit=digit_range)
         assert regex == expect_regex
 
     @pytest.mark.parametrize(
@@ -274,19 +319,28 @@ class TestFormatStrategy(EnumTestSuite):
             format_strategy.to_value_format(data_type="any data type")
 
     @pytest.mark.parametrize(
-        ("strategy", "data_type", "enums", "expect_type"),
+        ("strategy", "data_type", "static", "enums", "expect_type"),
         [
-            (FormatStrategy.BY_DATA_TYPE, str, [], str),
-            (FormatStrategy.BY_DATA_TYPE, int, [], int),
-            (FormatStrategy.BY_DATA_TYPE, "big_decimal", [], Decimal),
-            (FormatStrategy.BY_DATA_TYPE, bool, [], bool),
-            (FormatStrategy.FROM_ENUMS, str, ["ENUM_1", "ENUM_2", "ENUM_3"], str),
+            (FormatStrategy.BY_DATA_TYPE, str, None, [], str),
+            (FormatStrategy.BY_DATA_TYPE, int, None, [], int),
+            (FormatStrategy.BY_DATA_TYPE, "big_decimal", None, [], Decimal),
+            (FormatStrategy.BY_DATA_TYPE, bool, None, [], bool),
+            (FormatStrategy.STATIC_VALUE, str, "string_value", [], str),
+            (FormatStrategy.STATIC_VALUE, str, 123, [], int),
+            (FormatStrategy.STATIC_VALUE, str, ["ele1", "ele2"], [], list),
+            (FormatStrategy.STATIC_VALUE, str, {"key1": "value1"}, [], dict),
+            (FormatStrategy.FROM_ENUMS, str, None, ["ENUM_1", "ENUM_2", "ENUM_3"], str),
         ],
     )
     def test_generate_not_customize_value(
-        self, strategy: FormatStrategy, data_type: Union[None, str, object], enums: List[str], expect_type: type
+        self,
+        strategy: FormatStrategy,
+        data_type: Union[None, str, object],
+        static: Optional[Union[str, list, dict]],
+        enums: List[str],
+        expect_type: type,
     ):
-        value = strategy.generate_not_customize_value(data_type=data_type, enums=enums)
+        value = strategy.generate_not_customize_value(data_type=data_type, enums=enums, static=static)
         assert value is not None
         assert isinstance(value, expect_type)
         if enums:
