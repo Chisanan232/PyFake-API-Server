@@ -641,6 +641,49 @@ class TestInnerHTTPResponse:
                 ),
                 ["ENUM_1", "ENUM_2", "ENUM_3"],
             ),
+            # *str* type value with *format* (from static value)
+            (
+                HTTPResponse(
+                    strategy=ResponseStrategy.OBJECT,
+                    properties=[
+                        ResponseProperty(
+                            name="role",
+                            required=True,
+                            value_type="str",
+                            value_format=Format(strategy=FormatStrategy.STATIC_VALUE, static_value="200"),
+                        )
+                    ],
+                ),
+                r"200",
+            ),
+            # *str* type value with *format* (customize value with static value)
+            (
+                HTTPResponse(
+                    strategy=ResponseStrategy.OBJECT,
+                    properties=[
+                        ResponseProperty(
+                            name="role",
+                            required=True,
+                            value_type="str",
+                            value_format=Format(
+                                strategy=FormatStrategy.CUSTOMIZE,
+                                customize="<customize_value>",
+                                variables=[
+                                    Variable(
+                                        name="customize_value",
+                                        value_format=ValueFormat.Static,
+                                        digit=None,
+                                        size=None,
+                                        enum=None,
+                                        static_value="OK",
+                                    )
+                                ],
+                            ),
+                        )
+                    ],
+                ),
+                r"OK",
+            ),
             # *str* type value with *format* (customize value with big decimal)
             (
                 HTTPResponse(
