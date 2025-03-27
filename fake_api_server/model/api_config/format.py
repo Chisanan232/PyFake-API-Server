@@ -98,6 +98,7 @@ class Format(_Config, _Checkable):
             self.strategy == other.strategy
             and self.digit == other.digit
             and self.size == other.size
+            and self.static_value == other.static_value
             and self.enums == other.enums
             and self.customize == other.customize
             and variables_prop_is_same
