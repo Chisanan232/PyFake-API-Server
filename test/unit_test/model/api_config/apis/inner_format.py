@@ -655,6 +655,42 @@ class TestFormatWithCustomizeStrategy(TestFormatWithGeneralStrategy, CheckableTe
             (
                 FormatStrategy.CUSTOMIZE,
                 str,
+                "2025-03-27 10:27:36",
+                None,
+                [],
+                "<datetime_check>",
+                [Variable(name="datetime_check", value_format=ValueFormat.DateTime)],
+            ),
+            (
+                FormatStrategy.CUSTOMIZE,
+                str,
+                "2025/03/27 10:27:36",
+                None,
+                [],
+                "<datetime_check>",
+                [Variable(name="datetime_check", value_format=ValueFormat.DateTime)],
+            ),
+            (
+                FormatStrategy.CUSTOMIZE,
+                str,
+                "-1743042456",  # unix timestamp of 2025-03-27T10:27:36.321Z as seconds
+                None,
+                [],
+                "<datetime_check>",
+                [Variable(name="datetime_check", value_format=ValueFormat.DateTime)],
+            ),
+            (
+                FormatStrategy.CUSTOMIZE,
+                str,
+                "-1743042456000",  # unix timestamp of 2025-03-27T10:27:36.321Z as milliseconds
+                None,
+                [],
+                "<datetime_check>",
+                [Variable(name="datetime_check", value_format=ValueFormat.DateTime)],
+            ),
+            (
+                FormatStrategy.CUSTOMIZE,
+                str,
                 "123.123 EUR",
                 None,
                 [],
