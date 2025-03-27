@@ -170,7 +170,7 @@ class BaseAPIDocConfigTestSuite(metaclass=ABCMeta):
                     "type": "str",
                     "format": {
                         "strategy": "customize",
-                        "customize": "uri_value",
+                        "customize": "<uri_value>",
                         "variables": [{"name": "uri_value", "value_format": "uri"}],
                     },
                 },
@@ -286,7 +286,7 @@ class BaseAPIDocConfigTestSuite(metaclass=ABCMeta):
                                     "type": "str",
                                     "format": {
                                         "strategy": "customize",
-                                        "customize": "uri_value",
+                                        "customize": "<uri_value>",
                                         "variables": [{"name": "uri_value", "value_format": "uri"}],
                                     },
                                 },
@@ -358,7 +358,7 @@ class BaseAPIDocConfigTestSuite(metaclass=ABCMeta):
                                 "type": "str",
                                 "format": {
                                     "strategy": "customize",
-                                    "customize": "uri_value",
+                                    "customize": "<uri_value>",
                                     "variables": [{"name": "uri_value", "value_format": "uri"}],
                                 },
                             },
