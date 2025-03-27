@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from fake_api_server._utils.random import DigitRange, RandomInteger, ValueSize
 
@@ -138,6 +138,7 @@ class Variable(_Config, _Checkable):
     value_format: Optional[ValueFormat] = None
     digit: Optional[Digit] = None
     size: Optional[Size] = None
+    static_value: Optional[Union[str, int, list, dict]] = None
     enum: Optional[List[str]] = None
 
     _absolute_key: str = field(init=False, repr=False)
@@ -168,6 +169,7 @@ class Variable(_Config, _Checkable):
             and self.value_format == other.value_format
             and self.digit == other.digit
             and self.size == other.size
+            and self.static_value == other.static_value
             and self.enum == other.enum
         )
 
@@ -187,6 +189,7 @@ class Variable(_Config, _Checkable):
         size_data_model: Size = (self or data).size  # type: ignore[union-attr,assignment]
         size_value: Optional[dict] = size_data_model.serialize() if size_data_model else None
 
+        static_value: str = self._get_prop(data, prop="static_value")
         enum: str = self._get_prop(data, prop="enum")
         if not name or not value_format:
             return None
@@ -195,6 +198,7 @@ class Variable(_Config, _Checkable):
             "value_format": value_format.value,
             "digit": digit,
             "size": size_value,
+            "static_value": static_value,
             "enum": enum,
         }
         return serialized_data
@@ -207,7 +211,9 @@ class Variable(_Config, _Checkable):
         if not self.value_format:
             raise ValueError("Schema key *value_format* cannot be empty.")
 
-        if self.value_format == ValueFormat.Enum:
+        if self.value_format == ValueFormat.Static:
+            self.static_value = data.get("static_value", None)
+        elif self.value_format == ValueFormat.Enum:
             self.enum = data.get("enum", None)
         else:
             digit_value = data.get("digit", None)
@@ -232,6 +238,13 @@ class Variable(_Config, _Checkable):
         ):
             return False
         assert self.value_format
+        if self.value_format is ValueFormat.Static and not self.props_should_not_be_none(
+            under_check={
+                f"{self.absolute_model_key}.static_value": self.static_value,
+            },
+            accept_empty=False,
+        ):
+            return False
         if self.value_format is ValueFormat.Enum and not self.props_should_not_be_none(
             under_check={
                 f"{self.absolute_model_key}.enum": self.enum,

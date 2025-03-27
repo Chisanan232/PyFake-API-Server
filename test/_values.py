@@ -100,6 +100,7 @@ _Test_Variables_BigDecimal_USD: dict = {
         "max": 8,
         "min": 4,
     },
+    "static_value": None,
     "enum": None,
 }
 
@@ -120,6 +121,7 @@ _Test_Variables_Currency_Code: dict = {
     "value_format": "enum",
     "digit": None,
     "size": None,
+    "static_value": None,
     "enum": ["TWD", "USD", "EUR"],
 }
 
