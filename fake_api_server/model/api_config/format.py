@@ -273,7 +273,10 @@ class Format(_Config, _Checkable):
                 if size is None:
                     size = Size()
                 new_value = find_result[0].value_format.generate_value(
-                    enums=find_result[0].enum or [], size=size.to_value_size(), digit=digit.to_digit_range()
+                    static=find_result[0].static_value,
+                    enums=find_result[0].enum or [],
+                    size=size.to_value_size(),
+                    digit=digit.to_digit_range(),
                 )
                 value = value.replace(var, str(new_value))
             return value
