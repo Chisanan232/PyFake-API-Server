@@ -307,7 +307,7 @@ class Format(_Config, _Checkable):
         elif self.strategy is FormatStrategy.STATIC_VALUE:
             return f"fixed value *{self.static_value}*"
         elif self.strategy is FormatStrategy.FROM_ENUMS:
-            return f"oen of the enums value *{self.enums}*"
+            return f"one of the enums value *{self.enums}*"
         elif self.strategy is FormatStrategy.CUSTOMIZE:
             return f"like format as *{self.customize}*. Please refer to the property *variables* to know the details of variable settings."
         elif self.strategy is FormatStrategy.FROM_TEMPLATE:
