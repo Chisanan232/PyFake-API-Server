@@ -23,6 +23,9 @@ class Format(_Config, _Checkable):
     digit: Optional[Digit] = None
     size: Optional[Size] = None
 
+    # For static value strategy
+    static_value: Optional[Union[str, list, dict]] = None
+
     # For enum strategy
     enums: List[str] = field(default_factory=list)
 
@@ -117,6 +120,7 @@ class Format(_Config, _Checkable):
         size_data_model: Size = self._get_prop(data, prop="size")
         size_value: Optional[dict] = size_data_model.serialize() if size_data_model else None
 
+        static_value: Optional[Union[str, list, dict]] = self._get_prop(data, prop="static_value")
         enums: List[str] = self._get_prop(data, prop="enums")
         customize: str = self._get_prop(data, prop="customize")
         variables: List[Variable] = self._get_prop(data, prop="variables")
@@ -125,6 +129,7 @@ class Format(_Config, _Checkable):
             "strategy": strategy.value,
             "digit": digit,
             "size": size_value,
+            "static_value": static_value,
             "enums": enums,
             "customize": customize,
             "variables": [var.serialize() if isinstance(var, Variable) else var for var in variables],
@@ -152,6 +157,7 @@ class Format(_Config, _Checkable):
             size_data_model = Size()
             size_data_model.absolute_model_key = self.key
             self.size = size_data_model.deserialize(data=size_value or {})
+        self.static_value = data.get("static_value", None)
         self.enums = data.get("enums", [])
         self.customize = data.get("customize", "")
         self.variables = [_deserialize_variable(var) for var in (data.get("variables", []) or [])]
@@ -160,6 +166,7 @@ class Format(_Config, _Checkable):
 
     def is_work(self) -> bool:
         assert self.strategy
+        # TODO: Add checking at static value property
         if self.strategy is FormatStrategy.FROM_ENUMS and not self.condition_should_be_true(
             config_key=f"{self.absolute_model_key}.enums",
             condition=(not isinstance(self.enums, list) or (self.enums is not None and len(self.enums) == 0)),
@@ -207,6 +214,7 @@ class Format(_Config, _Checkable):
                 # Cannot find any mapping format string
                 return False
             return len(str(value)) == len(search_result.group(0))
+        # TODO: Add checking at static value property
         elif self.strategy is FormatStrategy.FROM_ENUMS:
             return isinstance(value, str) and value in self.enums
         elif self.strategy is FormatStrategy.CUSTOMIZE:
@@ -260,6 +268,7 @@ class Format(_Config, _Checkable):
                 )
                 value = value.replace(var, str(new_value))
             return value
+        # TODO: Add checking at static value property
         elif self.strategy is FormatStrategy.FROM_TEMPLATE:
             format_config: Format = self._current_template.common_config.format.get_format(self.use_name)
             format_config._current_template = self._current_template
@@ -289,6 +298,7 @@ class Format(_Config, _Checkable):
             return f"*{data_type}* type data"
         elif self.strategy is FormatStrategy.FROM_ENUMS:
             return f"oen of the enums value *{self.enums}*"
+        # TODO: Add checking at static value property
         elif self.strategy is FormatStrategy.CUSTOMIZE:
             return f"like format as *{self.customize}*. Please refer to the property *variables* to know the details of variable settings."
         elif self.strategy is FormatStrategy.FROM_TEMPLATE:
