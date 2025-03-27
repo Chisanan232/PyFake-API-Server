@@ -142,7 +142,7 @@ class TestValueFormat(EnumTestSuite):
         ("formatter", "enums", "size", "digit_range", "expect_regex"),
         [
             (ValueFormat.Date, [], None, None, r"\d{4}-\d{1,2}-\d{1,2}"),
-            (ValueFormat.DateTime, [], None, None, r"\d{4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{1,2}:\d{1,2}Z"),
+            (ValueFormat.DateTime, [], None, None, r"\d{4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{1,2}:\d{1,2}Z?"),
             (
                 ValueFormat.String,
                 [],

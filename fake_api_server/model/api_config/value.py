@@ -141,7 +141,7 @@ class ValueFormat(Enum):
         elif self is ValueFormat.Date:
             return r"\d{4}-\d{1,2}-\d{1,2}"
         elif self is ValueFormat.DateTime:
-            return r"\d{4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{1,2}:\d{1,2}Z"
+            return r"\d{4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{1,2}:\d{1,2}Z?"
         elif self is ValueFormat.Enum:
             return r"(" + r"|".join([re.escape(e) for e in enums]) + r")"
         elif self is ValueFormat.EMail:
