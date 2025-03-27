@@ -170,7 +170,7 @@ class BaseAPIDocConfigTestSuite(metaclass=ABCMeta):
                     "type": "str",
                     "format": {
                         "strategy": "customize",
-                        "customize": "uri_value",
+                        "customize": "<uri_value>",
                         "variables": [{"name": "uri_value", "value_format": "uri"}],
                     },
                 },
@@ -286,7 +286,7 @@ class BaseAPIDocConfigTestSuite(metaclass=ABCMeta):
                                     "type": "str",
                                     "format": {
                                         "strategy": "customize",
-                                        "customize": "uri_value",
+                                        "customize": "<uri_value>",
                                         "variables": [{"name": "uri_value", "value_format": "uri"}],
                                     },
                                 },
@@ -358,7 +358,7 @@ class BaseAPIDocConfigTestSuite(metaclass=ABCMeta):
                                 "type": "str",
                                 "format": {
                                     "strategy": "customize",
-                                    "customize": "uri_value",
+                                    "customize": "<uri_value>",
                                     "variables": [{"name": "uri_value", "value_format": "uri"}],
                                 },
                             },
@@ -844,7 +844,7 @@ class _BasePropertyDetailAdapterTestSuite(metaclass=ABCMeta):
                     value_type="str",
                     format=Format(
                         strategy=FormatStrategy.CUSTOMIZE,
-                        customize="datetime_value",
+                        customize="<datetime_value>",
                         variables=[Variable(name="datetime_value", value_format=ValueFormat.DateTime)],
                     ),
                     items=None,
@@ -876,7 +876,7 @@ class _BasePropertyDetailAdapterTestSuite(metaclass=ABCMeta):
                             value_type="str",
                             format=Format(
                                 strategy=FormatStrategy.CUSTOMIZE,
-                                customize="datetime_value",
+                                customize="<datetime_value>",
                                 variables=[Variable(name="datetime_value", value_format=ValueFormat.DateTime)],
                             ),
                             items=None,
@@ -930,7 +930,7 @@ class _BasePropertyDetailAdapterTestSuite(metaclass=ABCMeta):
                             value_type="str",
                             format=Format(
                                 strategy=FormatStrategy.CUSTOMIZE,
-                                customize="datetime_value",
+                                customize="<datetime_value>",
                                 variables=[Variable(name="datetime_value", value_format=ValueFormat.DateTime)],
                             ),
                             items=None,

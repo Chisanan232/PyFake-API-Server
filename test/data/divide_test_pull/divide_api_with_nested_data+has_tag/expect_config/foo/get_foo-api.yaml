@@ -9,7 +9,7 @@ http:
         type: str
         format:
           strategy: customize
-          customize: datetime_value
+          customize: <datetime_value>
           variables:
             - name: datetime_value
               value_format: "date-time"
@@ -64,7 +64,7 @@ http:
                     type: str
                     format:
                       strategy: customize
-                      customize: url_value
+                      customize: <url_value>
                       variables:
                         - name: url_value
                           value_format: "url"
@@ -80,7 +80,7 @@ http:
                     type: str
                     format:
                       strategy: customize
-                      customize: url_value
+                      customize: <url_value>
                       variables:
                         - name: url_value
                           value_format: "url"
@@ -96,7 +96,7 @@ http:
                     type: str
                     format:
                       strategy: customize
-                      customize: url_value
+                      customize: <url_value>
                       variables:
                         - name: url_value
                           value_format: "url"

@@ -15,7 +15,7 @@ mocked_apis:
               type: str
               format:
                 strategy: customize
-                customize: "datetime_value"
+                customize: "<datetime_value>"
                 variables:
                   - name: datetime_value
                     value_format: date-time
@@ -142,7 +142,7 @@ mocked_apis:
               type: str
               format:
                 strategy: customize
-                customize: "datetime_value"
+                customize: "<datetime_value>"
                 variables:
                   - name: datetime_value
                     value_format: date-time
@@ -174,7 +174,7 @@ mocked_apis:
               type: str
               format:
                 strategy: customize
-                customize: uri_value
+                customize: <uri_value>
                 variables:
                   - name: uri_value
                     value_format: "uri"
@@ -183,7 +183,7 @@ mocked_apis:
               type: str
               format:
                 strategy: customize
-                customize: url_value
+                customize: <url_value>
                 variables:
                   - name: url_value
                     value_format: "url"
