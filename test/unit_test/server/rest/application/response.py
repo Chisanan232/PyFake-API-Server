@@ -767,6 +767,120 @@ class TestInnerHTTPResponse:
     @pytest.mark.parametrize(
         ("mock_response_data", "expect_result_data_type"),
         [
+            # *dict* type value with some list values of specific format
+            (
+                HTTPResponse(
+                    strategy=ResponseStrategy.OBJECT,
+                    properties=[
+                        ResponseProperty(
+                            name="responseCode",
+                            required=True,
+                            value_type="str",
+                            value_format=Format(
+                                strategy=FormatStrategy.STATIC_VALUE,
+                                static_value="200",
+                            ),
+                        ),
+                        ResponseProperty(
+                            name="errorMessage",
+                            required=True,
+                            value_type="str",
+                            value_format=Format(
+                                strategy=FormatStrategy.STATIC_VALUE,
+                                static_value="OK",
+                            ),
+                        ),
+                        ResponseProperty(
+                            name="responseData",
+                            required=True,
+                            value_type="dict",
+                            items=[
+                                IteratorItem(
+                                    name="purchaseType",
+                                    value_type="list",
+                                    required=True,
+                                    items=[
+                                        # TAKE ATTENTION: given empty name as *None*
+                                        IteratorItem(
+                                            name=None,
+                                            value_type="str",
+                                            required=True,
+                                            value_format=Format(
+                                                strategy=FormatStrategy.FROM_ENUMS,
+                                                enums=["CASH", "CREDIT", "DEBIT"],
+                                            ),
+                                        ),
+                                    ],
+                                ),
+                                IteratorItem(
+                                    name="currency",
+                                    value_type="list",
+                                    required=True,
+                                    items=[
+                                        # TAKE ATTENTION: given empty name as empty string (same as default)
+                                        IteratorItem(
+                                            value_type="str",
+                                            required=True,
+                                            value_format=Format(
+                                                strategy=FormatStrategy.FROM_ENUMS,
+                                                enums=["USD", "KRW", "JPY", "TWD", "THB", "IDR", "ETH"],
+                                            ),
+                                        ),
+                                    ],
+                                ),
+                                IteratorItem(
+                                    name="partner",
+                                    value_type="list",
+                                    required=True,
+                                    items=[
+                                        IteratorItem(
+                                            name="id",
+                                            value_type="str",
+                                            required=True,
+                                            value_format=Format(strategy=FormatStrategy.BY_DATA_TYPE),
+                                        ),
+                                        IteratorItem(
+                                            name="name",
+                                            value_type="str",
+                                            required=True,
+                                        ),
+                                        IteratorItem(
+                                            name="contract",
+                                            value_type="list",
+                                            required=True,
+                                            items=[
+                                                IteratorItem(
+                                                    value_type="str",
+                                                    required=True,
+                                                    value_format=Format(
+                                                        strategy=FormatStrategy.FROM_ENUMS,
+                                                        enums=["DIRECT", "BROKERAGE", "AGENCY", "ORIGINAL"],
+                                                    ),
+                                                ),
+                                            ],
+                                        ),
+                                    ],
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+                {
+                    "responseCode": "200",
+                    "errorMessage": "OK",
+                    "responseData": {
+                        "purchaseType": [str],
+                        "currency": [str],
+                        "partner": [
+                            {
+                                "id": str,
+                                "name": str,
+                                "contract": [str],
+                            },
+                        ],
+                    },
+                },
+            ),
             # *dict* type value with more deeper nested data
             (
                 HTTPResponse(
@@ -1099,6 +1213,7 @@ class TestInnerHTTPResponse:
         expect_result_data_type: Union[list, dict],
     ):
         resp_data = http_resp.generate(data=mock_response_data)
+        print(f"[DEBUG] resp_data: {resp_data}")
         assert resp_data is not None
         assert type(resp_data) == type(expect_result_data_type)
         self._verify_response(resp_data, expect_result_data_type)
