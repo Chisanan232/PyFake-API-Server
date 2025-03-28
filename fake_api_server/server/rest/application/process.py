@@ -9,6 +9,7 @@ from fake_api_server.model.api_config.apis import (
     HTTPRequest,
     HTTPResponse,
 )
+from fake_api_server.model.api_config.value import ValueFormat
 
 from .request import BaseCurrentRequest
 from .response import BaseResponse
@@ -88,8 +89,8 @@ class HTTPRequestProcess(BaseHTTPProcess):
                             status_code=400,
                         )
                 else:
-                    if not isinstance(one_req_param_value, value_py_data_type) and not (
-                        value_py_data_type is bool and self._is_bool_value(one_req_param_value)
+                    if not isinstance(one_req_param_value, value_py_data_type) and not self._is_type(
+                        data_type=value_py_data_type, value=str(one_req_param_value)
                     ):
                         return self._generate_http_response(
                             f"The data type of request parameter *{param_info.name}* from Font-End site (*{type(one_req_param_value)}*) is different with the "
@@ -108,7 +109,7 @@ class HTTPRequestProcess(BaseHTTPProcess):
                                         f"Miss required parameter *{param_info.name}.{item.name}*.",
                                         status_code=400,
                                     )
-                                if (item.value_type and not isinstance(e[item.name], locate(item.value_type))) and not (locate(item.value_type) is bool and self._is_bool_value(e[item.name])):  # type: ignore[arg-type]
+                                if (item.value_type and not isinstance(e[item.name], locate(item.value_type))) and not self._is_type(data_type=locate(item.value_type), value=str(e[item.name])):  # type: ignore[arg-type]
                                     return self._generate_http_response(
                                         f"The data type of request parameter *{param_info.name}.{item.name}* from Font-End site (*{type(e[item.name])}*) is different "
                                         f"with the implementation of Back-End site (*{item.value_type}*).",
@@ -119,7 +120,7 @@ class HTTPRequestProcess(BaseHTTPProcess):
                                 e, (str, int, float)
                             ), "The data type of item object must be *str*, *int* or *float* type."
                             item = param_info.items[0]
-                            if (item.value_type and not isinstance(e, locate(item.value_type))) and not (locate(item.value_type) is bool and self._is_bool_value(e)):  # type: ignore[arg-type]
+                            if (item.value_type and not isinstance(e, locate(item.value_type))) and not self._is_type(data_type=locate(item.value_type), value=str(e)):  # type: ignore[arg-type]
                                 return self._generate_http_response(
                                     f"The data type of element in request parameter *{param_info.name}* from Font-End site (*{type(e)}*) is different "
                                     f"with the implementation of Back-End site (*{item.value_type}*).",
@@ -142,8 +143,10 @@ class HTTPRequestProcess(BaseHTTPProcess):
     def _generate_http_response(self, body: str, status_code: int) -> Any:
         return self._response.generate(body=body, status_code=status_code)
 
-    def _is_bool_value(self, value: str) -> bool:
-        return value.lower() in ["true", "false"]
+    def _is_type(self, data_type: Union[str, type], value: str) -> bool:
+        if re.search(ValueFormat.to_enum(data_type).generate_regex(), str(value)):
+            return True
+        return False
 
 
 class HTTPResponseProcess(BaseHTTPProcess):
