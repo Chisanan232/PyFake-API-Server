@@ -104,8 +104,8 @@ class HTTPProcessTestSpec(metaclass=ABCMeta):
             (
                 "/test-api-path",
                 "GET",
-                {"param1": "any_format", "single_iterable_param": [123]},
-                ["data type", "is different"],
+                {"param1": "incorrect_format", "single_iterable_param": [123]},
+                ["format should be", "like format as"],
                 400,
             ),
             ("/test-api-path", "GET", {"param1": "incorrect_format"}, ["format of data", "is incorrect"], 400),
@@ -131,8 +131,8 @@ class HTTPProcessTestSpec(metaclass=ABCMeta):
             (
                 "/test-api-path",
                 "POST",
-                {"param1": "any_format", "iterable_param": [{"name": "param1", "value": 123}]},
-                ["data type", "is different"],
+                {"param1": "any_format", "iterable_param": [{"name": "param1", "value": "not integer value"}]},
+                ["data type", "iterable_param.value", "is different"],
                 400,
             ),
             ("/test-api-path", "POST", {"param1": "incorrect_format"}, ["format of data", "is incorrect"], 400),
