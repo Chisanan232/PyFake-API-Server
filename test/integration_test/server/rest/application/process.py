@@ -146,7 +146,7 @@ class HTTPProcessTestSpec(metaclass=ABCMeta):
             # multiple options which be separate by entire key and value format:
             # http://127.0.0.1:8080/api/v1/prefix/test?iterable_param=true&iterable_paramfalse
             ("/test-list-type-param", "GET", {"iterable_param": ["true"]}, None, 200),
-            ("/test-list-type-param", "GET", {"iterable_param": ["true, false"]}, None, 200),
+            ("/test-list-type-param", "GET", {"iterable_param": ["true,false"]}, None, 200),
             ("/test-list-type-param", "GET", {"iterable_param": ["true", "false"]}, None, 200),
             ("/test-list-type-param", "GET", {"iterable_param": 123}, ["data type", "is different"], 400),
             # Valid request with general format strategy
