@@ -1,7 +1,7 @@
 import json
 import re
 from abc import ABCMeta, abstractmethod
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from fake_api_server._utils import import_web_lib
 from fake_api_server.model.api_config.apis import APIParameter
@@ -101,7 +101,7 @@ class FastAPIRequest(BaseCurrentRequest):
         return kwargs.get("request")
 
     def api_parameters(self, **kwargs) -> dict:
-        mock_api_details = kwargs.get("mock_api_details", None)
+        mock_api_details: Optional[dict] = kwargs.get("mock_api_details", None)
         if not mock_api_details:
             raise ValueError("Missing necessary argument *mock_api_details*.")
         api_params_info: List[APIParameter] = mock_api_details[self.api_path(kwargs["request"])][
