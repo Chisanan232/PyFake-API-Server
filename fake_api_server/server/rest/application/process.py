@@ -89,9 +89,7 @@ class HTTPRequestProcess(BaseHTTPProcess):
                             status_code=400,
                         )
                 else:
-                    if not isinstance(one_req_param_value, value_py_data_type) and not self._is_type(
-                        data_type=value_py_data_type, value=str(one_req_param_value)
-                    ):
+                    if not isinstance(one_req_param_value, value_py_data_type):
                         return self._generate_http_response(
                             f"The data type of request parameter *{param_info.name}* from Font-End site (*{type(one_req_param_value)}*) is different with the "
                             f"implementation of Back-End site (*{value_py_data_type}*).",
