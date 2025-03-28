@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import re
 from decimal import Decimal
@@ -28,6 +29,8 @@ from test._values import (
 )
 
 # isort: on
+
+logger = logging.getLogger(__name__)
 
 
 class _MockHTTPResponse:
@@ -1213,7 +1216,7 @@ class TestInnerHTTPResponse:
         expect_result_data_type: Union[list, dict],
     ):
         resp_data = http_resp.generate(data=mock_response_data)
-        print(f"[DEBUG] resp_data: {resp_data}")
+        logger.debug(f"The response be generated: {resp_data}")
         assert resp_data is not None
         assert type(resp_data) == type(expect_result_data_type)
         self._verify_response(resp_data, expect_result_data_type)
