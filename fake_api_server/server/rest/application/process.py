@@ -142,6 +142,9 @@ class HTTPRequestProcess(BaseHTTPProcess):
         return self._response.generate(body=body, status_code=status_code)
 
     def _is_type(self, data_type: Union[str, type], value: str) -> bool:
+        # NOTE: this common function only for checking the element value of array type value. So it could ensure a
+        # general value should not include comma.
+        assert "," not in value
         if re.search(ValueFormat.to_enum(data_type).generate_regex(), str(value)):
             return True
         return False
