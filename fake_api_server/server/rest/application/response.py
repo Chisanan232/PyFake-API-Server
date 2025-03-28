@@ -92,7 +92,7 @@ class HTTPResponse:
                 _value = init_data
                 _item = {}  # type: ignore[var-annotated]
                 for i in _v.items or []:
-                    if len(_v.items) == 1 and i.name == "":  # type: ignore[arg-type]
+                    if len(_v.items) == 1 and not i.name:  # type: ignore[arg-type]
                         _item = _initial_resp_details(i)  # type: ignore[arg-type, assignment]
                     else:
                         _item[i.name] = _initial_resp_details(i)  # type: ignore[arg-type]
