@@ -100,12 +100,12 @@ class HTTPProcessTestSpec(metaclass=ABCMeta):
             # Invalid request with *GET* HTTP method
             ("/test-api-path", "GET", {"miss_param": "miss_param"}, ["Miss required parameter"], 400),
             ("/test-api-path", "GET", {"param1": None}, ["Miss required parameter"], 400),
-            ("/test-api-path", "GET", {"param1": 123}, ["type of data", "is different"], 400),
+            ("/test-api-path", "GET", {"param1": 123}, ["data type", "is different"], 400),
             (
                 "/test-api-path",
                 "GET",
                 {"param1": "any_format", "single_iterable_param": [123]},
-                ["type of data", "is different"],
+                ["data type", "is different"],
                 400,
             ),
             ("/test-api-path", "GET", {"param1": "incorrect_format"}, ["format of data", "is incorrect"], 400),
@@ -120,7 +120,7 @@ class HTTPProcessTestSpec(metaclass=ABCMeta):
             # Invalid request with *POST* HTTP method
             ("/test-api-path", "POST", {"miss_param": "miss_param"}, ["Miss required parameter"], 400),
             ("/test-api-path", "POST", {"param1": None}, ["Miss required parameter"], 400),
-            ("/test-api-path", "POST", {"param1": 123}, ["type of data", "is different"], 400),
+            ("/test-api-path", "POST", {"param1": 123}, ["data type", "is different"], 400),
             (
                 "/test-api-path",
                 "POST",
@@ -132,7 +132,7 @@ class HTTPProcessTestSpec(metaclass=ABCMeta):
                 "/test-api-path",
                 "POST",
                 {"param1": "any_format", "iterable_param": [{"name": "param1", "value": 123}]},
-                ["type of data", "is different"],
+                ["data type", "is different"],
                 400,
             ),
             ("/test-api-path", "POST", {"param1": "incorrect_format"}, ["format of data", "is incorrect"], 400),
@@ -148,7 +148,7 @@ class HTTPProcessTestSpec(metaclass=ABCMeta):
             ("/test-list-type-param", "GET", {"iterable_param": ["true"]}, None, 200),
             ("/test-list-type-param", "GET", {"iterable_param": ["true, false"]}, None, 200),
             ("/test-list-type-param", "GET", {"iterable_param": ["true", "false"]}, None, 200),
-            ("/test-list-type-param", "GET", {"iterable_param": 123}, ["type of data", "is different"], 400),
+            ("/test-list-type-param", "GET", {"iterable_param": 123}, ["data type", "is different"], 400),
             # Valid request with general format strategy
             ("/test-api-req-param-format", "GET", {"format_param_str": "string_value"}, None, 200),
             (
@@ -184,14 +184,14 @@ class HTTPProcessTestSpec(metaclass=ABCMeta):
                 "/test-api-req-param-format",
                 "GET",
                 {"format_param_float": "not big decimal value"},
-                ["type of data", "is different"],
+                ["data type", "is different"],
                 400,
             ),
             (
                 "/test-api-req-param-format",
                 "GET",
                 {"format_param_str": "string_value", "format_param_float": "not big decimal value"},
-                ["type of data", "is different"],
+                ["data type", "is different"],
                 400,
             ),
             # Invalid request with static value format strategy
