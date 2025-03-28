@@ -108,8 +108,8 @@ class HTTPRequestProcess(BaseHTTPProcess):
                                     )
                                 if item.value_type and not isinstance(e[item.name], locate(item.value_type)):  # type: ignore[arg-type]
                                     return self._generate_http_response(
-                                        f"The type of data from Font-End site (*{type(one_req_param_value)}*) is different "
-                                        f"with the implementation of Back-End site (*{value_py_data_type}*).",
+                                        f"The type of data from Font-End site (*{type(e[item.name])}*) is different "
+                                        f"with the implementation of Back-End site (*{item.value_type}*).",
                                         status_code=400,
                                     )
                         elif len(param_info.items) == 1:
@@ -119,8 +119,8 @@ class HTTPRequestProcess(BaseHTTPProcess):
                             item = param_info.items[0]
                             if item.value_type and not isinstance(e, locate(item.value_type)):  # type: ignore[arg-type]
                                 return self._generate_http_response(
-                                    f"The type of data from Font-End site (*{type(one_req_param_value)}*) is different "
-                                    f"with the implementation of Back-End site (*{value_py_data_type}*).",
+                                    f"The type of data from Font-End site (*{type(e)}*) is different "
+                                    f"with the implementation of Back-End site (*{item.value_type}*).",
                                     status_code=400,
                                 )
                 # Check the data format of parameter
