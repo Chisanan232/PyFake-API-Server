@@ -82,7 +82,7 @@ class HTTPResponse:
     @classmethod
     def _generate_response_from_object(cls, data: MockAPIHTTPResponseConfig) -> dict:
 
-        def _initial_resp_details(v: ResponseProperty) -> Union[str, int, Decimal, bool, list, dict]:
+        def _initial_resp_details(resp_prop: ResponseProperty) -> Union[str, int, Decimal, bool, list, dict]:
 
             def _process_collection_data(
                 _v: ResponseProperty,
@@ -99,37 +99,37 @@ class HTTPResponse:
                 _value = insert_callback(_value, _item)
                 return _value
 
-            assert v.value_type
-            data_type = locate(v.value_type)
+            assert resp_prop.value_type
+            data_type = locate(resp_prop.value_type)
             assert isinstance(data_type, type)
-            if locate(v.value_type) is str:
-                value = v.generate_value_by_format(data_type=data_type, default="random string")
-            elif locate(v.value_type) is int:
-                value = v.generate_value_by_format(data_type=data_type, default="random integer")
-            elif locate(v.value_type) is float:
-                value = v.generate_value_by_format(data_type=data_type, default="random big decimal")
-            elif locate(v.value_type) is bool:
-                value = v.generate_value_by_format(data_type=data_type, default="random boolean")
-            elif locate(v.value_type) is list:
+            if locate(resp_prop.value_type) is str:
+                value = resp_prop.generate_value_by_format(data_type=data_type, default="random string")
+            elif locate(resp_prop.value_type) is int:
+                value = resp_prop.generate_value_by_format(data_type=data_type, default="random integer")
+            elif locate(resp_prop.value_type) is float:
+                value = resp_prop.generate_value_by_format(data_type=data_type, default="random big decimal")
+            elif locate(resp_prop.value_type) is bool:
+                value = resp_prop.generate_value_by_format(data_type=data_type, default="random boolean")
+            elif locate(resp_prop.value_type) is list:
 
                 def _insert_callback(init_value: list, item: dict) -> list:
                     init_value.append(item)
                     return init_value
 
                 list_size = 1
-                if v.value_format is not None and v.value_format.size is not None:
-                    list_size = v.value_format.size.generate_random_int()
+                if resp_prop.value_format is not None and resp_prop.value_format.size is not None:
+                    list_size = resp_prop.value_format.size.generate_random_int()
                 value = []
                 for _ in range(list_size):
-                    one_element_value = _process_collection_data(v, init_data=[], insert_callback=_insert_callback)  # type: ignore[arg-type]
+                    one_element_value = _process_collection_data(resp_prop, init_data=[], insert_callback=_insert_callback)  # type: ignore[arg-type]
                     value.extend(one_element_value)
-            elif locate(v.value_type) is dict:
+            elif locate(resp_prop.value_type) is dict:
 
                 def _insert_callback(init_value: dict, item: dict) -> dict:  # type: ignore[misc]
                     init_value.update(item)
                     return init_value
 
-                value = _process_collection_data(v, init_data={}, insert_callback=_insert_callback)  # type: ignore[arg-type]
+                value = _process_collection_data(resp_prop, init_data={}, insert_callback=_insert_callback)  # type: ignore[arg-type]
             else:
                 raise NotImplementedError
             return value
