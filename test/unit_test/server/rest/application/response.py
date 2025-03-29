@@ -471,7 +471,7 @@ class TestInnerHTTPResponse:
                             name="white_list",
                             required=True,
                             value_type="list",
-                            value_format=Format(size=Size(max_value=4, min_value=2), accept_duplicated_element=False),
+                            value_format=Format(size=Size(max_value=4, min_value=2), accept_duplicate_element=False),
                             items=[
                                 IteratorItem(
                                     name="",
@@ -494,7 +494,7 @@ class TestInnerHTTPResponse:
                             name="white_list",
                             required=True,
                             value_type="list",
-                            value_format=Format(size=Size(only_equal=3), accept_duplicated_element=False),
+                            value_format=Format(size=Size(only_equal=3), accept_duplicate_element=False),
                             items=[
                                 IteratorItem(
                                     name="",
@@ -517,7 +517,7 @@ class TestInnerHTTPResponse:
                             name="white_list",
                             required=True,
                             value_type="list",
-                            value_format=Format(size=Size(max_value=4, min_value=4), accept_duplicated_element=True),
+                            value_format=Format(size=Size(max_value=4, min_value=4), accept_duplicate_element=True),
                             items=[
                                 IteratorItem(
                                     name="",
@@ -540,7 +540,7 @@ class TestInnerHTTPResponse:
                             name="white_list",
                             required=True,
                             value_type="list",
-                            value_format=Format(size=Size(only_equal=3), accept_duplicated_element=True),
+                            value_format=Format(size=Size(only_equal=3), accept_duplicate_element=True),
                             items=[
                                 IteratorItem(
                                     name="",
@@ -662,7 +662,7 @@ class TestInnerHTTPResponse:
                     and resp_props.items[0].value_format is not None
                     and resp_props.items[0].value_format.strategy == FormatStrategy.FROM_ENUMS
                 ):
-                    if resp_props.value_format.accept_duplicated_element is False:
+                    if resp_props.value_format.accept_duplicate_element is False:
                         assert len(v) <= len(resp_props.items[0].value_format.enums)
                     else:
                         assert size_setting.min_value <= len(v) <= size_setting.max_value
