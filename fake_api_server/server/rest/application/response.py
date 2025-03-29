@@ -92,7 +92,7 @@ class HTTPResponse:
                 _value = init_data
                 _item = {}  # type: ignore[var-annotated]
                 for i in _v.items or []:
-                    if len(_v.items) == 1 and i.name == "":  # type: ignore[arg-type]
+                    if len(_v.items) == 1 and not i.name:  # type: ignore[arg-type]
                         _item = _initial_resp_details(i)  # type: ignore[arg-type, assignment]
                     else:
                         _item[i.name] = _initial_resp_details(i)  # type: ignore[arg-type]
@@ -119,17 +119,17 @@ class HTTPResponse:
                 list_size = 1
                 if v.value_format is not None and v.value_format.size is not None:
                     list_size = v.value_format.size.generate_random_int()
-                value = []  # type: ignore[assignment]
+                value = []
                 for _ in range(list_size):
                     one_element_value = _process_collection_data(v, init_data=[], insert_callback=_insert_callback)  # type: ignore[arg-type]
-                    value.extend(one_element_value)  # type: ignore[union-attr]
+                    value.extend(one_element_value)
             elif locate(v.value_type) is dict:
 
                 def _insert_callback(init_value: dict, item: dict) -> dict:  # type: ignore[misc]
                     init_value.update(item)
                     return init_value
 
-                value = _process_collection_data(v, init_data={}, insert_callback=_insert_callback)  # type: ignore[arg-type,assignment]
+                value = _process_collection_data(v, init_data={}, insert_callback=_insert_callback)  # type: ignore[arg-type]
             else:
                 raise NotImplementedError
             return value

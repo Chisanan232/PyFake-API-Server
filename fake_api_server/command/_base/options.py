@@ -151,12 +151,14 @@ class CommandOption:
             "dest": self.name,
             "help": self.help_description_content,
             "type": self.option_value_type,
-            "default": self.default_value,
+            "default": self.default_value if not self._is_constant_action else None,
+            "const": self.default_value if self._is_constant_action else None,
+            "nargs": "?" if self._is_constant_action else None,
             "action": self.action or "store",
         }
         cmd_option_args_clone = copy.copy(cmd_option_args)
         for arg_name, arg_val in cmd_option_args.items():
-            if not arg_val:
+            if arg_val is None:
                 cmd_option_args_clone.pop(arg_name)
         return cmd_option_args_clone
 
@@ -170,6 +172,10 @@ class CommandOption:
 
     def copy(self) -> "CommandOption":
         return copy.copy(self)
+
+    @property
+    def _is_constant_action(self) -> bool:
+        return (self.action is not None) and ("const" in self.action)
 
     def _dispatch_parser(self, parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
         if self.sub_cmd and self.sub_parser:

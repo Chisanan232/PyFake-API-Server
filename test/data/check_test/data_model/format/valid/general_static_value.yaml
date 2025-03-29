@@ -1,0 +1,2 @@
+strategy: 'static_value'
+static_value: 'OK'

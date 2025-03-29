@@ -106,42 +106,42 @@ class TestFormatAdapter:
 
             elif pyfake_config.strategy is FormatStrategy.CUSTOMIZE:
                 if formatter is ApiDocValueFormat.Date:
-                    assert pyfake_config.customize == "date_value"
+                    assert pyfake_config.customize == "<date_value>"
                     assert pyfake_config.variables
                     assert pyfake_config.variables[0].name == "date_value"
                     assert pyfake_config.variables[0].value_format == ValueFormat.Date
                 elif formatter is ApiDocValueFormat.DateTime:
-                    assert pyfake_config.customize == "datetime_value"
+                    assert pyfake_config.customize == "<datetime_value>"
                     assert pyfake_config.variables
                     assert pyfake_config.variables[0].name == "datetime_value"
                     assert pyfake_config.variables[0].value_format == ValueFormat.DateTime
                 elif formatter is ApiDocValueFormat.EMail:
-                    assert pyfake_config.customize == "email_value"
+                    assert pyfake_config.customize == "<email_value>"
                     assert pyfake_config.variables
                     assert pyfake_config.variables[0].name == "email_value"
                     assert pyfake_config.variables[0].value_format == ValueFormat.EMail
                 elif formatter is ApiDocValueFormat.UUID:
-                    assert pyfake_config.customize == "uuid_value"
+                    assert pyfake_config.customize == "<uuid_value>"
                     assert pyfake_config.variables
                     assert pyfake_config.variables[0].name == "uuid_value"
                     assert pyfake_config.variables[0].value_format == ValueFormat.UUID
                 elif formatter is ApiDocValueFormat.URI:
-                    assert pyfake_config.customize == "uri_value"
+                    assert pyfake_config.customize == "<uri_value>"
                     assert pyfake_config.variables
                     assert pyfake_config.variables[0].name == "uri_value"
                     assert pyfake_config.variables[0].value_format == ValueFormat.URI
                 elif formatter is ApiDocValueFormat.URL:
-                    assert pyfake_config.customize == "url_value"
+                    assert pyfake_config.customize == "<url_value>"
                     assert pyfake_config.variables
                     assert pyfake_config.variables[0].name == "url_value"
                     assert pyfake_config.variables[0].value_format == ValueFormat.URL
                 elif formatter is ApiDocValueFormat.IPv4:
-                    assert pyfake_config.customize == "ipv4_value"
+                    assert pyfake_config.customize == "<ipv4_value>"
                     assert pyfake_config.variables
                     assert pyfake_config.variables[0].name == "ipv4_value"
                     assert pyfake_config.variables[0].value_format == ValueFormat.IPv4
                 elif formatter is ApiDocValueFormat.IPv6:
-                    assert pyfake_config.customize == "ipv6_value"
+                    assert pyfake_config.customize == "<ipv6_value>"
                     assert pyfake_config.variables
                     assert pyfake_config.variables[0].name == "ipv6_value"
                     assert pyfake_config.variables[0].value_format == ValueFormat.IPv6

@@ -32,6 +32,7 @@ class ValueFormat(Enum):
     Boolean = "bool"
     Date = "date"
     DateTime = "date-time"
+    Static = "static"
     Enum = "enum"
 
     # specific format
@@ -44,7 +45,7 @@ class ValueFormat(Enum):
     IPv6 = "ipv6"
 
     @property
-    def _nothin_need_to_check(self) -> List["ValueFormat"]:
+    def _nothing_need_to_check(self) -> List["ValueFormat"]:
         return [
             ValueFormat.Date,
             ValueFormat.DateTime,
@@ -75,13 +76,17 @@ class ValueFormat(Enum):
             return v
 
     def generate_value(
-        self, enums: List[str] = [], size: ValueSize = Default_Value_Size, digit: DigitRange = Default_Digit_Range
-    ) -> Union[str, int, bool, Decimal]:
+        self,
+        static: Optional[Union[str, int, list, dict]] = None,
+        enums: List[str] = [],
+        size: ValueSize = Default_Value_Size,
+        digit: DigitRange = Default_Digit_Range,
+    ) -> Union[str, int, bool, list, dict, Decimal]:
 
         def _generate_max_value(digit_number: int) -> int:
             return int("".join(["9" for _ in range(digit_number)])) if digit_number > 0 else 0
 
-        self._ensure_setting_value_is_valid(enums=enums, size=size, digit=digit)
+        self._ensure_setting_value_is_valid(static=static, enums=enums, size=size, digit=digit)
         if self is ValueFormat.String:
             return RandomString.generate(size=size)
         elif self is ValueFormat.Integer:
@@ -100,6 +105,8 @@ class ValueFormat(Enum):
             return RandomDate.generate()
         elif self is ValueFormat.DateTime:
             return RandomDateTime.generate()
+        elif self is ValueFormat.Static:
+            return static  # type: ignore[return-value]
         elif self is ValueFormat.Enum:
             return RandomFromSequence.generate(enums)
         elif self is ValueFormat.EMail:
@@ -119,9 +126,13 @@ class ValueFormat(Enum):
             raise NotImplementedError(f"Doesn't implement how to generate the value by format {self}.")
 
     def generate_regex(
-        self, enums: List[str] = [], size: ValueSize = Default_Value_Size, digit: DigitRange = Default_Digit_Range
+        self,
+        static: Optional[Union[str, int, list, dict]] = None,
+        enums: List[str] = [],
+        size: ValueSize = Default_Value_Size,
+        digit: DigitRange = Default_Digit_Range,
     ) -> str:
-        self._ensure_setting_value_is_valid(enums=enums, size=size, digit=digit)
+        self._ensure_setting_value_is_valid(static=static, enums=enums, size=size, digit=digit)
         if self is ValueFormat.String:
             return (
                 r"[@\-_!#$%^&+*()\[\]<>?=/\\|`'\"}{~:;,.\w\s]{"
@@ -141,7 +152,13 @@ class ValueFormat(Enum):
         elif self is ValueFormat.Date:
             return r"\d{4}-\d{1,2}-\d{1,2}"
         elif self is ValueFormat.DateTime:
-            return r"\d{4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{1,2}:\d{1,2}Z"
+            iso_format = r"\d{4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{1,2}:\d{1,2}Z?"
+            unix_seconds_format = r"^[+]?\d{10,11}"
+            unix_milliseconds_format = r"^[+]?\d{13,14}"
+            all_datetime_formats = r"|".join([iso_format, unix_seconds_format, unix_milliseconds_format])
+            return r"(" + all_datetime_formats + r")"
+        elif self is ValueFormat.Static:
+            return re.escape(str(static))
         elif self is ValueFormat.Enum:
             return r"(" + r"|".join([re.escape(e) for e in enums]) + r")"
         elif self is ValueFormat.EMail:
@@ -160,7 +177,9 @@ class ValueFormat(Enum):
         else:
             raise NotImplementedError(f"Doesn't implement what the regex expression should be with format {self}.")
 
-    def _ensure_setting_value_is_valid(self, enums: List[str], size: ValueSize, digit: DigitRange) -> None:
+    def _ensure_setting_value_is_valid(
+        self, static: Optional[Union[str, int, list, dict]], enums: List[str], size: ValueSize, digit: DigitRange
+    ) -> None:
         if self is ValueFormat.String:
             assert size is not None, "The size of string must not be empty."
             assert size.max > 0, f"The maximum size of string must be greater than 0. size: {size}."
@@ -176,9 +195,11 @@ class ValueFormat(Enum):
             assert (
                 digit.decimal >= 0
             ), f"The digit number of decimal part must be greater or equal to 0. digit.decimal: {digit.decimal}."
-        elif self in self._nothin_need_to_check:
+        elif self in self._nothing_need_to_check:
             # TODO: Add some settings for datetime value
             assert True
+        elif self is ValueFormat.Static:
+            assert static is not None, "The static value must not be empty."
         elif self is ValueFormat.Enum:
             assert enums is not None and len(enums) > 0, "The enums must not be empty."
             assert (
@@ -188,6 +209,7 @@ class ValueFormat(Enum):
 
 class FormatStrategy(Enum):
     BY_DATA_TYPE = "by_data_type"
+    STATIC_VALUE = "static_value"
     FROM_ENUMS = "from_enums"
     CUSTOMIZE = "customize"
     FROM_TEMPLATE = "from_template"
@@ -200,13 +222,18 @@ class FormatStrategy(Enum):
     def generate_not_customize_value(
         self,
         data_type: Optional[type] = None,
+        static: Optional[Union[str, int, list, dict]] = None,
         enums: List[str] = [],
         size: ValueSize = Default_Value_Size,
         digit: DigitRange = Default_Digit_Range,
-    ) -> Union[str, int, bool, Decimal]:
-        if self in [FormatStrategy.BY_DATA_TYPE, FormatStrategy.FROM_ENUMS]:
+    ) -> Union[str, int, bool, list, dict, Decimal]:
+        if self in [FormatStrategy.BY_DATA_TYPE, FormatStrategy.STATIC_VALUE, FormatStrategy.FROM_ENUMS]:
             assert data_type is not None, "Format setting require *data_type* must not be empty."
+            if self is FormatStrategy.STATIC_VALUE:
+                data_type = "static"  # type: ignore[assignment]
             if self is FormatStrategy.FROM_ENUMS:
                 data_type = "enum"  # type: ignore[assignment]
-            return self.to_value_format(data_type=data_type).generate_value(enums=enums, size=size, digit=digit)
+            return self.to_value_format(data_type=data_type).generate_value(
+                static=static, enums=enums, size=size, digit=digit
+            )
         raise ValueError(f"This function doesn't support *{self}* currently.")

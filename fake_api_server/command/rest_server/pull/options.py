@@ -54,6 +54,7 @@ class BaseURL(BaseSubCmdPullOption):
     cli_option: str = "--base-url"
     name: str = "base_url"
     help_description: str = "The base URL which must be the part of path all the APIs begin with."
+    default_value: str = ""
 
 
 class BaseFilePath(BaseSubCmdPullOption):
@@ -64,6 +65,7 @@ class BaseFilePath(BaseSubCmdPullOption):
         "words, it would automatically add the base path in front of all the other file "
         "paths in configuration."
     )
+    default_value: str = "./"
 
 
 class IncludeTemplateConfig(BaseSubCmdPullOption):

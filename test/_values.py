@@ -100,6 +100,7 @@ _Test_Variables_BigDecimal_USD: dict = {
         "max": 8,
         "min": 4,
     },
+    "static_value": None,
     "enum": None,
 }
 
@@ -120,6 +121,7 @@ _Test_Variables_Currency_Code: dict = {
     "value_format": "enum",
     "digit": None,
     "size": None,
+    "static_value": None,
     "enum": ["TWD", "USD", "EUR"],
 }
 
@@ -143,6 +145,10 @@ _Test_Response_Property_General_Format: dict = {
 }
 
 # The expect value it should generate: ENUM2
+_General_Static_Format: dict = {
+    "strategy": "static_value",
+    "static_value": "fixed_string_value",
+}
 _General_Enum_Format: dict = {
     "strategy": "from_enums",
     "enums": ["ENUM1", "ENUM2", "ENUM3"],
@@ -187,7 +193,7 @@ _Test_Iterable_Parameter_Item_Name: dict = {
 _Test_Iterable_Parameter_Item_Value: dict = {
     "name": "value",
     "required": True,
-    "type": "str",
+    "type": "int",
 }
 _Test_Iterable_Parameter_Items: List[dict] = [_Test_Iterable_Parameter_Item_Name, _Test_Iterable_Parameter_Item_Value]
 _Test_Iterable_Parameter_With_Single_Value: dict = {
@@ -252,6 +258,13 @@ _Test_API_Parameter_With_General_Format_Float: dict = {
     "default": None,
     "type": "float",
     "format": _General_Format,
+}
+_Test_API_Parameter_With_Static_Format: dict = {
+    "name": "format_param",
+    "required": True,
+    "default": None,
+    "type": "str",
+    "format": _General_Static_Format,
 }
 _Test_API_Parameter_With_Enum_Format: dict = {
     "name": "format_param",
@@ -360,6 +373,35 @@ def _api_params(iterable_param_type: str) -> List[dict]:
 
 
 # Sample API for testing ('<base URL>/google' with GET)
+_Array_Type_Request_Param_In_Query_Path: dict = {
+    "url": "/google",
+    "http": {
+        "request": {
+            "method": "GET",
+            "parameters": [
+                {
+                    "name": "iterable_param",
+                    "required": True,
+                    "default": [],
+                    "type": "list",
+                    "format": None,
+                    "items": [
+                        {
+                            "name": "",
+                            "required": True,
+                            "type": "bool",
+                        },
+                    ],
+                },
+            ],
+        },
+        "response": {
+            "strategy": "string",
+            "value": "This is array type request parameter API.",
+        },
+    },
+}
+
 _Google_Home_Value: dict = {
     "url": "/google",
     "http": {
@@ -558,6 +600,20 @@ _Test_Home_With_General_Format_Req_Param: dict = {
 }
 
 # API has parameters which have format setting
+_Test_Home_With_Static_Format_Req_Param: dict = {
+    "url": "/test/verify-static-format-req-param",
+    "http": {
+        "request": {
+            "method": "DELETE",
+            "parameters": [_Test_API_Parameter_With_Static_Format],
+        },
+        "response": {
+            "strategy": "string",
+            "value": '{ "responseCode": "200", "errorMessage": "OK", "content": "This is Test home." }',
+        },
+    },
+    "cookie": [{"TEST": "cookie_value"}],
+}
 _Test_Home_With_Enums_Format_Req_Param: dict = {
     "url": "/test/verify-enums-format-req-param",
     "http": {

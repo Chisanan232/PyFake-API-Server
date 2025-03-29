@@ -28,7 +28,7 @@ class TemplateConfig(_Config, _Checkable):
         template_common_config: Optional[TemplateCommonConfig] = self.common_config or self._get_prop(
             data, prop="common_config"
         )
-        if not (activate is not None and template_file_config and template_common_config):
+        if not (activate is not None and template_file_config):
             return None
         serialized_data = {
             "activate": activate,

@@ -305,6 +305,9 @@ class MockAPIs(_OperatingTemplatableConfig, _Checkable):
         self.template.stop_if_fail = self.stop_if_fail
         return self.template.is_work() and (self.base.is_work() if self.base else True)
 
+    def is_empty(self) -> bool:
+        return self._apis == {}
+
     def _set_mocked_apis(self, api_key: str = "", api_config: Optional[MockAPI] = None) -> None:  # type: ignore[override]
         if api_key and api_config:
             self.apis[api_key] = api_config
@@ -578,6 +581,9 @@ class FakeAPIConfig(_Config, _Checkable):
         assert self.apis is not None
         self.apis.stop_if_fail = self.stop_if_fail
         return self.apis.is_work()
+
+    def is_empty(self) -> bool:
+        return self.apis.is_empty() if self.apis else True
 
     def from_yaml(self, path: str, is_pull: bool = False) -> Optional["FakeAPIConfig"]:
         self.is_pull = is_pull

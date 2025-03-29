@@ -1,7 +1,7 @@
 import json
 import re
 from abc import ABCMeta, abstractmethod
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from fake_api_server._utils import import_web_lib
 from fake_api_server.model.api_config.apis import APIParameter
@@ -29,6 +29,18 @@ class BaseCurrentRequest(metaclass=ABCMeta):
     def http_method(self, request: Any) -> str:
         pass
 
+    def _parse_multiple_values(self, param_value: Any) -> Any:
+        return (
+            param_value[0].split(",")
+            if (
+                isinstance(param_value, list)
+                and len(param_value) > 0
+                and isinstance(param_value[0], str)
+                and "," in param_value[0]
+            )
+            else param_value
+        )
+
 
 class FlaskRequest(BaseCurrentRequest):
     # For Flask, the API parameter always be string even it's integer.
@@ -52,7 +64,7 @@ class FlaskRequest(BaseCurrentRequest):
             # Get iterable parameters (only for HTTP method *GET*)
             for mock_api_param in iterable_mock_api_params:
                 iterable_api_param = request.args.getlist(mock_api_param.name)
-                handled_api_params[mock_api_param.name] = iterable_api_param
+                handled_api_params[mock_api_param.name] = self._parse_multiple_values(iterable_api_param)
 
         # Get general parameters
         api_params = request.args if request.method.upper() == "GET" else request.form or request.data
@@ -101,7 +113,7 @@ class FastAPIRequest(BaseCurrentRequest):
         return kwargs.get("request")
 
     def api_parameters(self, **kwargs) -> dict:
-        mock_api_details = kwargs.get("mock_api_details", None)
+        mock_api_details: Optional[dict] = kwargs.get("mock_api_details", None)
         if not mock_api_details:
             raise ValueError("Missing necessary argument *mock_api_details*.")
         api_params_info: List[APIParameter] = mock_api_details[self.api_path(kwargs["request"])][
@@ -112,7 +124,7 @@ class FastAPIRequest(BaseCurrentRequest):
         if "model" in kwargs.keys():
             for param_name in api_param_names:
                 if hasattr(kwargs["model"], param_name):
-                    api_param[param_name] = getattr(kwargs["model"], param_name)
+                    api_param[param_name] = self._parse_multiple_values(getattr(kwargs["model"], param_name))
         return api_param
 
     def api_path(self, request: "fastapi.Request") -> str:  # type: ignore[name-defined]
