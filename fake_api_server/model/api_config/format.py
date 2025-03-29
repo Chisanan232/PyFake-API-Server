@@ -205,12 +205,11 @@ class Format(_Config, _Checkable):
             if self.size.is_work() is False:
                 return False
 
-        if self.accept_duplicated_element is not None:
-            if not self.condition_should_be_true(
-                config_key=f"{self.absolute_model_key}.accept_duplicated_element",
-                condition=not isinstance(self.accept_duplicated_element, bool),
-            ):
-                return False
+        if self.accept_duplicated_element is not None and not self.condition_should_be_true(
+            config_key=f"{self.absolute_model_key}.accept_duplicated_element",
+            condition=not isinstance(self.accept_duplicated_element, bool),
+        ):
+            return False
 
         return True
 
