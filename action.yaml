@@ -1,0 +1,71 @@
+name: "Operate PyFake-API-Server"
+description: "Operate PyFake-API-Server by command line."
+author: "Bryant Liu"
+inputs:
+  server-type:
+    description: "The API server type for PyFake-API-Server to operate."
+    required: false
+    default: ""
+  subcommand:
+    description: "The subcommand line of the API server type to do some operations."
+    required: false
+    default: ""
+  subcommand-options:
+    description: "The command line options of the subcommand line with the API server type to do some operations."
+    required: false
+    default: ""
+  directly-command-line:
+    description: "The entire command line of the PyFake-API-Server to run (without prefix command line *fake*)."
+    required: false
+    default: ""
+outputs:
+  fake-api-server-running-result:
+    description: "If it has any change, this property value would be *true*."
+    value: ${{ steps.fake-api-server-running-result.outputs.running-result }}
+runs:
+  using: "composite"
+  steps:
+    - name: Fail-fast in unsupported environments
+      if: runner.os == 'Windows'
+      shell: bash -eEuo pipefail {0}
+      run: |
+        >&2 echo This action is only able to run under GNU/Linux or Apple MacOS environments
+        exit 1
+
+    - name: Clone project
+      uses: actions/checkout@v4
+
+    - name: Install Python 3.13 for running Fake-API-Server
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+
+    - name: Install Python dependencies
+      shell: bash
+      run: |
+        pip --version
+        pip install -U poetry
+
+    - name: Build Python runtime environment by Poetry
+      shell: bash
+      run: |
+        poetry --version
+        poetry install
+
+    - name: Run Fake-API-Server
+      if: inputs.server-type != '' && inputs.subcommand != '' && inputs.subcommand-options != ''
+      run: poetry run fake ${{ inputs.server-type }} ${{ inputs.subcommand }} ${{ inputs.subcommand-options }}
+      shell: bash
+
+    - name: Run Fake-API-Server by directory command line
+      if: inputs.directly-command-line != ''
+      run: poetry run fake ${{ inputs.directly-command-line }}
+      shell: bash
+
+    - name: Set result as output value
+      id: fake-api-server-running-result
+      shell: bash
+      run: echo "running-result=$(echo $TODO_SOMETHING_OUTPUT)" >> $GITHUB_OUTPUT
+branding:
+  icon: server
+  color: 'black'
