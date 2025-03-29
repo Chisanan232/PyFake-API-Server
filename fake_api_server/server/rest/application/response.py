@@ -12,6 +12,7 @@ from fake_api_server.model.api_config.apis import (
     HTTPResponse as MockAPIHTTPResponseConfig,
 )
 from fake_api_server.model.api_config.apis.response_strategy import ResponseStrategy
+from fake_api_server.model.api_config.value import FormatStrategy
 
 
 class BaseResponse(metaclass=ABCMeta):
@@ -89,13 +90,24 @@ class HTTPResponse:
                 init_data: Union[list, dict],
                 insert_callback: Callable[[Union[list, dict], dict], Union[list, dict]],
             ) -> Union[list, dict]:
+                assert isinstance(value, list)
                 _value = init_data
                 _item = {}  # type: ignore[var-annotated]
                 for i in _v.items or []:
+                    while True:
+                        _item_details = _initial_resp_details(i)  # type: ignore[arg-type]
+                        if (
+                            _v.value_format is not None
+                            and _v.value_format.accept_duplicated_element is False
+                            and _item_details in value
+                        ):
+                            continue
+                        else:
+                            break
                     if len(_v.items) == 1 and not i.name:  # type: ignore[arg-type]
-                        _item = _initial_resp_details(i)  # type: ignore[arg-type, assignment]
+                        _item = _item_details  # type: ignore[assignment]
                     else:
-                        _item[i.name] = _initial_resp_details(i)  # type: ignore[arg-type]
+                        _item[i.name] = _item_details
                 _value = insert_callback(_value, _item)
                 return _value
 
@@ -119,9 +131,19 @@ class HTTPResponse:
                 list_size = 1
                 if resp_prop.value_format is not None and resp_prop.value_format.size is not None:
                     list_size = resp_prop.value_format.size.generate_random_int()
+                    if (
+                        resp_prop.items
+                        and len(resp_prop.items) == 1
+                        and resp_prop.items[0].value_format is not None
+                        and resp_prop.items[0].value_format.strategy is FormatStrategy.FROM_ENUMS
+                        and len(resp_prop.items[0].value_format.enums) < list_size
+                        and not resp_prop.value_format.accept_duplicated_element
+                    ):
+                        list_size = len(resp_prop.items[0].value_format.enums)
                 value = []
                 for _ in range(list_size):
                     one_element_value = _process_collection_data(resp_prop, init_data=[], insert_callback=_insert_callback)  # type: ignore[arg-type]
+                    assert isinstance(value, list)
                     value.extend(one_element_value)
             elif locate(resp_prop.value_type) is dict:
 
