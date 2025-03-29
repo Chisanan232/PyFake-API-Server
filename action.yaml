@@ -41,6 +41,7 @@ runs:
       shell: bash
       run: |
         pip --version
+        pip install -U urllib3
         pip install -U "fake-api-server[all]"
         pip list
 
