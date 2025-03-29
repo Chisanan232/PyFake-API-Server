@@ -1,0 +1,83 @@
+name: "Operate PyFake-API-Server"
+description: "Operate PyFake-API-Server by command line."
+author: "Bryant Liu"
+inputs:
+  server-type:
+    description: "The API server type for PyFake-API-Server to operate."
+    required: false
+    default: ""
+  subcommand:
+    description: "The subcommand line of the API server type to do some operations."
+    required: false
+    default: ""
+  subcommand-options:
+    description: "The command line options of the subcommand line with the API server type to do some operations."
+    required: false
+    default: ""
+  directly-command-line:
+    description: "The entire command line of the PyFake-API-Server to run (without prefix command line *fake*)."
+    required: false
+    default: ""
+outputs:
+  fake-api-server-running-result:
+    description: "If it has any change, this property value would be *true*."
+    value: ${{ steps.fake-api-server-running-result.outputs.running-result }}
+runs:
+  using: "composite"
+  steps:
+    - name: Fail-fast in unsupported environments
+      if: runner.os == 'Windows'
+      shell: bash -eEuo pipefail {0}
+      run: |
+        >&2 echo This action is only able to run under GNU/Linux or Apple MacOS environments
+        exit 1
+
+    - name: Install Python 3.12 for running Fake-API-Server
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install Python dependencies for Fake-API-Server
+      shell: bash
+      run: |
+        pip --version
+        pip install -U poetry
+        poetry add "fake-api-server[all]"
+        poetry run pip list
+
+    - name: Show the Fake-API-Server version info
+      shell: bash
+      run: |
+        poetry run fake --version
+        poetry run fake --help
+
+    - name: Troubleshooting log 1
+      shell: bash
+      run: |
+        poetry run fake rest-server --help
+
+    - name: Troubleshooting log 2
+      shell: bash
+      run: |
+        poetry run fake rest-server run --help
+
+    - name: Run Fake-API-Server with ${{ inputs.subcommand }} under ${{ inputs.server-type }}
+      if: inputs.server-type != '' && inputs.subcommand != '' && inputs.subcommand-options != ''
+      run: |
+        fake ${{ inputs.server-type }} ${{ inputs.subcommand }} ${{ inputs.subcommand-options }}
+        echo "Run fake server ..."
+#        curl http://127.0.0.1:9672/api/v1/test/foo?date=2025-03-29T00:00:00.000Z&fooType=ENUM1
+      shell: bash
+
+    - name: Run Fake-API-Server by directory command line
+      if: inputs.directly-command-line != ''
+      run: fake ${{ inputs.directly-command-line }}
+      shell: bash
+
+    - name: Set result as output value
+      id: fake-api-server-running-result
+      shell: bash
+      run: echo "running-result=$(echo $TODO_SOMETHING_OUTPUT)" >> $GITHUB_OUTPUT
+branding:
+  icon: server
+  color: 'black'
