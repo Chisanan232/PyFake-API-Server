@@ -32,10 +32,10 @@ runs:
         >&2 echo This action is only able to run under GNU/Linux or Apple MacOS environments
         exit 1
 
-    - name: Install Python 3.13 for running Fake-API-Server
+    - name: Install Python 3.12 for running Fake-API-Server
       uses: actions/setup-python@v5
       with:
-        python-version: '3.13'
+        python-version: '3.12'
 
     - name: Install Python dependencies for Fake-API-Server
       shell: bash
