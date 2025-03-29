@@ -32,37 +32,34 @@ runs:
         >&2 echo This action is only able to run under GNU/Linux or Apple MacOS environments
         exit 1
 
-    - name: Clone project
-      uses: actions/checkout@v4
-
     - name: Install Python 3.13 for running Fake-API-Server
       uses: actions/setup-python@v5
       with:
         python-version: '3.13'
 
-    - name: Install Python dependencies
+    - name: Install Python dependencies for Fake-API-Server
       shell: bash
       run: |
         pip --version
-        pip install -U poetry
+        pip install -U "fake-api-server[all]"
+        pip list
 
-    - name: Build Python runtime environment by Poetry
+    - name: Show the Fake-API-Server version info
       shell: bash
       run: |
-        poetry --version
-        poetry install
+        fake --version
 
     - name: Run Fake-API-Server with ${{ inputs.subcommand }} under ${{ inputs.server-type }}
       if: inputs.server-type != '' && inputs.subcommand != '' && inputs.subcommand-options != ''
       run: |
-        poetry run fake ${{ inputs.server-type }} ${{ inputs.subcommand }} ${{ inputs.subcommand-options }}
+        fake ${{ inputs.server-type }} ${{ inputs.subcommand }} ${{ inputs.subcommand-options }}
         echo "Run fake server ..."
         curl http://127.0.0.1:9672/api/v1/test/foo?date=2025-03-29T00:00:00.000Z&fooType=ENUM1
       shell: bash
 
     - name: Run Fake-API-Server by directory command line
       if: inputs.directly-command-line != ''
-      run: poetry run fake ${{ inputs.directly-command-line }}
+      run: fake ${{ inputs.directly-command-line }}
       shell: bash
 
     - name: Set result as output value
