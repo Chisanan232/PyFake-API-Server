@@ -52,7 +52,7 @@ runs:
         poetry --version
         poetry install
 
-    - name: Run Fake-API-Server
+    - name: Run Fake-API-Server with ${{ inputs.subcommand }} under ${{ inputs.server-type }}
       if: inputs.server-type != '' && inputs.subcommand != '' && inputs.subcommand-options != ''
       run: poetry run fake ${{ inputs.server-type }} ${{ inputs.subcommand }} ${{ inputs.subcommand-options }}
       shell: bash
