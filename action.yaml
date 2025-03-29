@@ -54,7 +54,10 @@ runs:
 
     - name: Run Fake-API-Server with ${{ inputs.subcommand }} under ${{ inputs.server-type }}
       if: inputs.server-type != '' && inputs.subcommand != '' && inputs.subcommand-options != ''
-      run: poetry run fake ${{ inputs.server-type }} ${{ inputs.subcommand }} ${{ inputs.subcommand-options }}
+      run: |
+        poetry run fake ${{ inputs.server-type }} ${{ inputs.subcommand }} ${{ inputs.subcommand-options }}
+        echo "Run fake server ..."
+        curl http://127.0.0.1:9672/api/v1/test/foo?date=2025-03-29T00:00:00.000Z&fooType=ENUM1
       shell: bash
 
     - name: Run Fake-API-Server by directory command line
