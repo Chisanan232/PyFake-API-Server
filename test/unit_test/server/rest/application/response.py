@@ -462,7 +462,7 @@ class TestInnerHTTPResponse:
                 {"white_list": [{"name": "random string"}, {"name": "random string"}, {"name": "random string"}]},
             ),
             # # enum elements of *list* type value only (only one data which has name and no nested data)
-            # size with max & min (only one enum property)
+            # size with max & min with unique element of array (only one enum property)
             (
                 HTTPResponse(
                     strategy=ResponseStrategy.OBJECT,
@@ -485,7 +485,7 @@ class TestInnerHTTPResponse:
                 ),
                 {"white_list": ["ENUM1"]},
             ),
-            # size with only_equal (only one enum property)
+            # size with only_equal with unique element of array (only one enum property)
             (
                 HTTPResponse(
                     strategy=ResponseStrategy.OBJECT,
@@ -508,7 +508,7 @@ class TestInnerHTTPResponse:
                 ),
                 {"white_list": ["ENUM1"]},
             ),
-            # size with max & min (more than one enum property)
+            # size with max & min with deplicate element of array (only one enum property)
             (
                 HTTPResponse(
                     strategy=ResponseStrategy.OBJECT,
@@ -531,7 +531,7 @@ class TestInnerHTTPResponse:
                 ),
                 {"white_list": ["ENUM1", "ENUM1", "ENUM1", "ENUM1"]},
             ),
-            # size with only_equal (more than one enum property)
+            # size with only_equal with deplicate element (only one enum property)
             (
                 HTTPResponse(
                     strategy=ResponseStrategy.OBJECT,
