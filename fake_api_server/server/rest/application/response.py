@@ -114,15 +114,15 @@ class HTTPResponse:
             assert resp_prop.value_type
             data_type = locate(resp_prop.value_type)
             assert isinstance(data_type, type)
-            if locate(resp_prop.value_type) is str:
+            if data_type is str:
                 value = resp_prop.generate_value_by_format(data_type=data_type, default="random string")
-            elif locate(resp_prop.value_type) is int:
+            elif data_type is int:
                 value = resp_prop.generate_value_by_format(data_type=data_type, default="random integer")
-            elif locate(resp_prop.value_type) is float:
+            elif data_type is float:
                 value = resp_prop.generate_value_by_format(data_type=data_type, default="random big decimal")
-            elif locate(resp_prop.value_type) is bool:
+            elif data_type is bool:
                 value = resp_prop.generate_value_by_format(data_type=data_type, default="random boolean")
-            elif locate(resp_prop.value_type) is list:
+            elif data_type is list:
 
                 def _insert_callback(init_value: list, item: dict) -> list:
                     init_value.append(item)
@@ -145,7 +145,7 @@ class HTTPResponse:
                     one_element_value = _process_collection_data(resp_prop, init_data=[], insert_callback=_insert_callback)  # type: ignore[arg-type]
                     assert isinstance(value, list)
                     value.extend(one_element_value)
-            elif locate(resp_prop.value_type) is dict:
+            elif data_type is dict:
 
                 def _insert_callback(init_value: dict, item: dict) -> dict:  # type: ignore[misc]
                     init_value.update(item)
