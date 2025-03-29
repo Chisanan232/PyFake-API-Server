@@ -193,7 +193,7 @@ _Test_Iterable_Parameter_Item_Name: dict = {
 _Test_Iterable_Parameter_Item_Value: dict = {
     "name": "value",
     "required": True,
-    "type": "str",
+    "type": "int",
 }
 _Test_Iterable_Parameter_Items: List[dict] = [_Test_Iterable_Parameter_Item_Name, _Test_Iterable_Parameter_Item_Value]
 _Test_Iterable_Parameter_With_Single_Value: dict = {
@@ -373,6 +373,35 @@ def _api_params(iterable_param_type: str) -> List[dict]:
 
 
 # Sample API for testing ('<base URL>/google' with GET)
+_Array_Type_Request_Param_In_Query_Path: dict = {
+    "url": "/google",
+    "http": {
+        "request": {
+            "method": "GET",
+            "parameters": [
+                {
+                    "name": "iterable_param",
+                    "required": True,
+                    "default": [],
+                    "type": "list",
+                    "format": None,
+                    "items": [
+                        {
+                            "name": "",
+                            "required": True,
+                            "type": "bool",
+                        },
+                    ],
+                },
+            ],
+        },
+        "response": {
+            "strategy": "string",
+            "value": "This is array type request parameter API.",
+        },
+    },
+}
+
 _Google_Home_Value: dict = {
     "url": "/google",
     "http": {

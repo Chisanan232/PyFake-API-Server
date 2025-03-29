@@ -9,6 +9,7 @@ from fake_api_server.model.api_config.apis import (
     HTTPRequest,
     HTTPResponse,
 )
+from fake_api_server.model.api_config.value import ValueFormat
 
 from .request import BaseCurrentRequest
 from .response import BaseResponse
@@ -77,25 +78,27 @@ class HTTPRequestProcess(BaseHTTPProcess):
                 return self._generate_http_response(f"Miss required parameter *{param_info.name}*.", status_code=400)
             if one_req_param_value:
                 # Check the data type of parameter
-                assert param_info.value_type, "It must cannot miss the value type value of each parameters."
+                assert param_info.value_type, "It must cannot miss the value type setting of each parameters."
                 value_py_data_type: type = locate(param_info.value_type)  # type: ignore[assignment]
                 if value_py_data_type in [int, float, "big_decimal"] and self._request.int_type_value_is_string:
                     # For the Flask part. It would always be string type of each API parameter.
                     if re.search(r"\d{1,128}", str(one_req_param_value)) is None:
                         return self._generate_http_response(
-                            f"The type of data from Font-End site (*{type(one_req_param_value)}*) is different with the "
-                            f"implementation of Back-End site (*{value_py_data_type}*).",
+                            f"The data type of request parameter *{param_info.name}* from Font-End site "
+                            f"(*{type(one_req_param_value)}*) is different with the implementation of Back-End "
+                            f"site (*{value_py_data_type}*).",
                             status_code=400,
                         )
                 else:
-                    if param_info.value_type and not isinstance(one_req_param_value, value_py_data_type):
+                    if not isinstance(one_req_param_value, value_py_data_type):
                         return self._generate_http_response(
-                            f"The type of data from Font-End site (*{type(one_req_param_value)}*) is different with the "
-                            f"implementation of Back-End site (*{value_py_data_type}*).",
+                            f"The data type of request parameter *{param_info.name}* from Font-End site "
+                            f"(*{type(one_req_param_value)}*) is different with the implementation of Back-End "
+                            f"site (*{value_py_data_type}*).",
                             status_code=400,
                         )
                 # Check the element of list
-                if param_info.value_type and value_py_data_type is list and param_info.items:
+                if value_py_data_type is list and param_info.items:
                     assert isinstance(one_req_param_value, list)
                     for e in one_req_param_value:
                         if len(param_info.items) > 1:
@@ -106,10 +109,16 @@ class HTTPRequestProcess(BaseHTTPProcess):
                                         f"Miss required parameter *{param_info.name}.{item.name}*.",
                                         status_code=400,
                                     )
-                                if item.value_type and not isinstance(e[item.name], locate(item.value_type)):  # type: ignore[arg-type]
+                                item_value_type = locate(item.value_type)  # type: ignore[arg-type]
+                                if (
+                                    item.value_type and not isinstance(e[item.name], item_value_type)  # type: ignore[arg-type]
+                                ) and not self._is_type(
+                                    data_type=item_value_type, value=str(e[item.name])  # type: ignore[arg-type]
+                                ):
                                     return self._generate_http_response(
-                                        f"The type of data from Font-End site (*{type(one_req_param_value)}*) is different "
-                                        f"with the implementation of Back-End site (*{value_py_data_type}*).",
+                                        f"The data type of request parameter *{param_info.name}.{item.name}* "
+                                        f"from Font-End site (*{type(e[item.name])}*) is different with the "
+                                        f"implementation of Back-End site (*{item.value_type}*).",
                                         status_code=400,
                                     )
                         elif len(param_info.items) == 1:
@@ -117,14 +126,19 @@ class HTTPRequestProcess(BaseHTTPProcess):
                                 e, (str, int, float)
                             ), "The data type of item object must be *str*, *int* or *float* type."
                             item = param_info.items[0]
-                            if item.value_type and not isinstance(e, locate(item.value_type)):  # type: ignore[arg-type]
+                            item_value_type = locate(item.value_type)  # type: ignore[arg-type]
+                            if (
+                                item.value_type and not isinstance(e, item_value_type)  # type: ignore[arg-type]
+                            ) and not self._is_type(
+                                data_type=item_value_type, value=str(e)  # type: ignore[arg-type]
+                            ):
                                 return self._generate_http_response(
-                                    f"The type of data from Font-End site (*{type(one_req_param_value)}*) is different "
-                                    f"with the implementation of Back-End site (*{value_py_data_type}*).",
+                                    f"The data type of element in request parameter *{param_info.name}* from "
+                                    f"Font-End site (*{type(e)}*) is different with the implementation of Back-End "
+                                    f"site (*{item.value_type}*).",
                                     status_code=400,
                                 )
                 # Check the data format of parameter
-                assert param_info.value_type, "Miss required property *value_type*."
                 assert isinstance(value_py_data_type, type)
                 value_format = param_info.value_format
                 if param_info.value_format and not value_format.value_format_is_match(  # type: ignore[union-attr]
@@ -140,6 +154,14 @@ class HTTPRequestProcess(BaseHTTPProcess):
 
     def _generate_http_response(self, body: str, status_code: int) -> Any:
         return self._response.generate(body=body, status_code=status_code)
+
+    def _is_type(self, data_type: Union[str, type], value: str) -> bool:
+        # NOTE: this common function only for checking the element value of array type value. So it could ensure a
+        # general value should not include comma.
+        assert "," not in value
+        if re.search(ValueFormat.to_enum(data_type).generate_regex(), str(value)):
+            return True
+        return False
 
 
 class HTTPResponseProcess(BaseHTTPProcess):
