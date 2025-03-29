@@ -22,6 +22,7 @@ class Format(_Config, _Checkable):
     # For general --- by data type strategy
     digit: Optional[Digit] = None
     size: Optional[Size] = None
+    accept_duplicated_element: Optional[bool] = None
 
     # For static value strategy
     static_value: Optional[Union[str, int, list, dict]] = None
@@ -98,6 +99,7 @@ class Format(_Config, _Checkable):
             self.strategy == other.strategy
             and self.digit == other.digit
             and self.size == other.size
+            and self.accept_duplicated_element == other.accept_duplicated_element
             and self.static_value == other.static_value
             and self.enums == other.enums
             and self.customize == other.customize
@@ -120,6 +122,7 @@ class Format(_Config, _Checkable):
 
         size_data_model: Size = self._get_prop(data, prop="size")
         size_value: Optional[dict] = size_data_model.serialize() if size_data_model else None
+        accept_duplicated_element: bool = self._get_prop(data, prop="accept_duplicated_element")
 
         static_value: Optional[Union[str, int, list, dict]] = self._get_prop(data, prop="static_value")
         enums: List[str] = self._get_prop(data, prop="enums")
@@ -130,6 +133,7 @@ class Format(_Config, _Checkable):
             "strategy": strategy.value,
             "digit": digit,
             "size": size_value,
+            "accept_duplicated_element": accept_duplicated_element,
             "static_value": static_value,
             "enums": enums,
             "customize": customize,
@@ -158,6 +162,7 @@ class Format(_Config, _Checkable):
             size_data_model = Size()
             size_data_model.absolute_model_key = self.key
             self.size = size_data_model.deserialize(data=size_value or {})
+        self.accept_duplicated_element = data.get("accept_duplicated_element", None)
         self.static_value = data.get("static_value", None)
         self.enums = data.get("enums", [])
         self.customize = data.get("customize", "")
@@ -198,6 +203,13 @@ class Format(_Config, _Checkable):
         if self.size is not None:
             self.size.stop_if_fail = self.stop_if_fail
             if self.size.is_work() is False:
+                return False
+
+        if self.accept_duplicated_element is not None:
+            if not self.condition_should_be_true(
+                config_key=f"{self.absolute_model_key}.accept_duplicated_element",
+                condition=not isinstance(self.accept_duplicated_element, bool),
+            ):
                 return False
 
         return True
