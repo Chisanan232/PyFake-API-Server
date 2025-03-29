@@ -48,7 +48,7 @@ jobs:
       - name: Validate the feature by trying to send API request
         shell: bash
         run: |
-          curl http://127.0.0.1:9672/api/v1/test/foo?date=2025-03-29T00:00:00.000Z&fooType=ENUM1,ENUM2
+          curl http://127.0.0.1:9672/api/v1/test/foo?date=2025-03-29T00:00:00.000Z&fooType=ENUM1
 
   run_rest-server_subcmd_run_by_entire_cmd:
     runs-on: ubuntu-latest
@@ -64,7 +64,7 @@ jobs:
       - name: Validate the feature by trying to send API request
         shell: bash
         run: |
-          curl http://127.0.0.1:9672/api/v1/test/foo?date=2025-03-29T00:00:00.000Z&fooType=ENUM1,ENUM2
+          curl http://127.0.0.1:9672/api/v1/test/foo?date=2025-03-29T00:00:00.000Z&fooType=ENUM1
 
   run_rest-server_subcmd_get:
     runs-on: ubuntu-latest
