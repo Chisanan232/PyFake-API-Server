@@ -50,7 +50,15 @@ runs:
       run: |
         fake --version
         fake --help
+
+    - name: Troubleshooting log 1
+      shell: bash
+      run: |
         fake rest-server --help
+
+    - name: Troubleshooting log 2
+      shell: bash
+      run: |
         fake rest-server run --help
 
     - name: Run Fake-API-Server with ${{ inputs.subcommand }} under ${{ inputs.server-type }}
