@@ -41,25 +41,25 @@ runs:
       shell: bash
       run: |
         pip --version
-        pip install -U urllib3
-        pip install -U "fake-api-server[all]"
-        pip list
+        pip install -U poetry
+        poetry add "fake-api-server[all]"
+        poetry run pip list
 
     - name: Show the Fake-API-Server version info
       shell: bash
       run: |
-        fake --version
-        fake --help
+        poetry run fake --version
+        poetry run fake --help
 
     - name: Troubleshooting log 1
       shell: bash
       run: |
-        fake rest-server --help
+        poetry run fake rest-server --help
 
     - name: Troubleshooting log 2
       shell: bash
       run: |
-        fake rest-server run --help
+        poetry run fake rest-server run --help
 
     - name: Run Fake-API-Server with ${{ inputs.subcommand }} under ${{ inputs.server-type }}
       if: inputs.server-type != '' && inputs.subcommand != '' && inputs.subcommand-options != ''
