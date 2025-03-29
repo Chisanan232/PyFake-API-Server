@@ -90,7 +90,7 @@ class HTTPResponse:
                 init_data: Union[list, dict],
                 insert_callback: Callable[[Union[list, dict], dict], Union[list, dict]],
             ) -> Union[list, dict]:
-                assert isinstance(value, list)
+                assert isinstance(value, (list, dict))
                 _value = init_data
                 _item = {}  # type: ignore[var-annotated]
                 for i in _v.items or []:
@@ -151,6 +151,7 @@ class HTTPResponse:
                     init_value.update(item)
                     return init_value
 
+                value = {}
                 value = _process_collection_data(resp_prop, init_data={}, insert_callback=_insert_callback)  # type: ignore[arg-type]
             else:
                 raise NotImplementedError
