@@ -508,6 +508,31 @@ class TestInnerHTTPResponse:
                 ),
                 {"white_list": ["ENUM1"]},
             ),
+            # size with only_equal with unique element of array (multiple enum properties)
+            (
+                HTTPResponse(
+                    strategy=ResponseStrategy.OBJECT,
+                    properties=[
+                        ResponseProperty(
+                            name="white_list",
+                            required=True,
+                            value_type="list",
+                            value_format=Format(size=Size(max_value=6, min_value=5), accept_duplicate_element=False),
+                            items=[
+                                IteratorItem(
+                                    name="",
+                                    value_type="str",
+                                    required=True,
+                                    value_format=Format(
+                                        strategy=FormatStrategy.FROM_ENUMS, enums=["ENUM1", "ENUM2", "ENUM3", "ENUM4"]
+                                    ),
+                                ),
+                            ],
+                        )
+                    ],
+                ),
+                {"white_list": ["ENUM1", "ENUM2", "ENUM3", "ENUM4"]},
+            ),
             # size with max & min with deplicate element of array (only one enum property)
             (
                 HTTPResponse(
@@ -655,7 +680,6 @@ class TestInnerHTTPResponse:
             assert len(resp_data.values()) == 1
             for k, v in resp_data.items():
                 chk_eles = list(map(lambda e: e == expect_result[k][0], v))
-                assert False not in chk_eles
                 if (
                     resp_props.value_type == "list"
                     and len(resp_props.items) == 1
@@ -663,10 +687,15 @@ class TestInnerHTTPResponse:
                     and resp_props.items[0].value_format.strategy == FormatStrategy.FROM_ENUMS
                 ):
                     if resp_props.value_format.accept_duplicate_element is False:
+                        # NOTE: only for the specific test case about generating multiple enum properties with unique
+                        # element setting
+                        assert sorted(v) == sorted(expect_result[k])
                         assert len(v) <= len(resp_props.items[0].value_format.enums)
                     else:
+                        assert False not in chk_eles
                         assert size_setting.min_value <= len(v) <= size_setting.max_value
                 else:
+                    assert False not in chk_eles
                     assert size_setting.min_value <= len(v) <= size_setting.max_value
 
     @pytest.mark.parametrize(
