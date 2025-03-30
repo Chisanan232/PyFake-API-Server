@@ -471,7 +471,7 @@ class TestInnerHTTPResponse:
                             name="white_list",
                             required=True,
                             value_type="list",
-                            value_format=Format(size=Size(max_value=4, min_value=2), accept_duplicate_element=False),
+                            value_format=Format(size=Size(max_value=4, min_value=2), unique_element=True),
                             items=[
                                 IteratorItem(
                                     name="",
@@ -494,7 +494,7 @@ class TestInnerHTTPResponse:
                             name="white_list",
                             required=True,
                             value_type="list",
-                            value_format=Format(size=Size(only_equal=3), accept_duplicate_element=False),
+                            value_format=Format(size=Size(only_equal=3), unique_element=True),
                             items=[
                                 IteratorItem(
                                     name="",
@@ -517,7 +517,7 @@ class TestInnerHTTPResponse:
                             name="white_list",
                             required=True,
                             value_type="list",
-                            value_format=Format(size=Size(max_value=6, min_value=5), accept_duplicate_element=False),
+                            value_format=Format(size=Size(max_value=6, min_value=5), unique_element=True),
                             items=[
                                 IteratorItem(
                                     name="",
@@ -542,7 +542,7 @@ class TestInnerHTTPResponse:
                             name="white_list",
                             required=True,
                             value_type="list",
-                            value_format=Format(size=Size(max_value=4, min_value=4), accept_duplicate_element=True),
+                            value_format=Format(size=Size(max_value=4, min_value=4), unique_element=False),
                             items=[
                                 IteratorItem(
                                     name="",
@@ -565,7 +565,7 @@ class TestInnerHTTPResponse:
                             name="white_list",
                             required=True,
                             value_type="list",
-                            value_format=Format(size=Size(only_equal=3), accept_duplicate_element=True),
+                            value_format=Format(size=Size(only_equal=3), unique_element=False),
                             items=[
                                 IteratorItem(
                                     name="",
@@ -686,7 +686,7 @@ class TestInnerHTTPResponse:
                     and resp_props.items[0].value_format is not None
                     and resp_props.items[0].value_format.strategy == FormatStrategy.FROM_ENUMS
                 ):
-                    if resp_props.value_format.accept_duplicate_element is False:
+                    if resp_props.value_format.unique_element is True:
                         # NOTE: only for the specific test case about generating multiple enum properties with unique
                         # element setting
                         assert sorted(v) == sorted(expect_result[k])

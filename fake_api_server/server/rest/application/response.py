@@ -98,7 +98,7 @@ class HTTPResponse:
                         _item_details = _initial_resp_details(i)  # type: ignore[arg-type]
                         if (
                             _v.value_format is not None
-                            and _v.value_format.accept_duplicate_element is False
+                            and _v.value_format.unique_element is True
                             and _item_details in value
                         ):
                             continue
@@ -137,7 +137,7 @@ class HTTPResponse:
                         and resp_prop.items[0].value_format is not None
                         and resp_prop.items[0].value_format.strategy is FormatStrategy.FROM_ENUMS
                         and len(resp_prop.items[0].value_format.enums) < list_size
-                        and not resp_prop.value_format.accept_duplicate_element
+                        and resp_prop.value_format.unique_element
                     ):
                         list_size = len(resp_prop.items[0].value_format.enums)
                 value = []
