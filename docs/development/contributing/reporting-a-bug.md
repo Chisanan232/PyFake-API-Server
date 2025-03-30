@@ -20,8 +20,8 @@ Unfortunately, **_PyFake-API-Server_** doesn't support _Windows_ OS currently. S
 
 [![Supported Versions](https://img.shields.io/pypi/pyversions/fake-api-server.svg?logo=python&logoColor=FBE072)](https://pypi.org/project/fake-api-server)
 
-**_PyFake-API-Server_** only supports Python version 3.8 +. So please make sure the Python version in your current runtime environment
-is 3.8 +.
+**_PyFake-API-Server_** only supports Python version 3.9 +. So please make sure the Python version in your current runtime environment
+is 3.9 +.
 
 ### **_PyFake-API-Server_** version
 
