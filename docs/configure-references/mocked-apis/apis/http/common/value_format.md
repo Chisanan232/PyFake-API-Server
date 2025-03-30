@@ -32,7 +32,7 @@ The following format strategies are provided by **_PyFake-API-Server_**:
 
 Set the digit setting of the value.
 
-!!! info "Not for every value"
+!!! tip "Not for every value"
 
     This property would be great to use for numeric type value only. A
     non-numeric type value, i.e., pure string type or boolean type value,
@@ -45,7 +45,7 @@ About more details, please refer to [here](#formatdigit_1).
 
 Set the value size of the value.
 
-!!! info "Size in different meanings for different types"
+!!! tip "Size in different meanings for different types"
 
     A size of value could be 2 meanings:
 
@@ -62,7 +62,7 @@ Set the specific value be fixed for generating without any changes or modificati
 
 Activate to use this property with strategy `STATIC_VALUE`.
 
-!!! tip "Exactly usage"
+!!! example "Exactly usage"
 
     Sometimes we don't want the value is randomly which doesn't
     be good to test, so we want to fix the value as a specific
