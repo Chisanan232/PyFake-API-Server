@@ -16,7 +16,9 @@ class SysArg:
         if not args:
             return SysArg(subcmd=SubCommandLine.Base)
 
-        no_pyfile_subcmds = list(filter(lambda a: not re.search(r".{1,1024}.py", a), args))
+        no_pyfile_subcmds = list(
+            filter(lambda a: not re.search(r".{1,1024}.py", a) and not re.search(r".{0,1024}fake", a), args)
+        )
         subcmds: List[str] = []
         for subcmd_or_options in no_pyfile_subcmds:
             search_subcmd = re.search(r"-.{1,256}", subcmd_or_options)
