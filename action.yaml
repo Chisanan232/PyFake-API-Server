@@ -38,7 +38,7 @@ runs:
         python-version: '3.12'
 
     - name: Install Python dependencies for Fake-API-Server
-      shell: sh
+      shell: bash
       run: |
         pip --version
         pip install -U urllib3
@@ -46,24 +46,29 @@ runs:
         pip list
 
     - name: Show the Fake-API-Server version info
-      shell: sh
+      shell: bash
       run: |
         fake --version
         fake --help
 
+    - name: Troubleshooting log where fake
+      shell: bash
+      run: |
+        which fake
+
     - name: Troubleshooting log 1
-      shell: sh
+      shell: bash
       run: |
         fake rest-server --help
 
     - name: Troubleshooting log 2
-      shell: sh
+      shell: bash
       run: |
         fake rest-server run --help
 
     - name: Run Fake-API-Server with ${{ inputs.subcommand }} under ${{ inputs.server-type }}
       if: inputs.server-type != '' && inputs.subcommand != '' && inputs.subcommand-options != ''
-      shell: sh
+      shell: bash
       run: |
         fake ${{ inputs.server-type }} ${{ inputs.subcommand }} ${{ inputs.subcommand-options }}
         echo "Run fake server ..."
@@ -71,12 +76,12 @@ runs:
 
     - name: Run Fake-API-Server by directory command line
       if: inputs.directly-command-line != ''
-      shell: sh
+      shell: bash
       run: fake ${{ inputs.directly-command-line }}
 
     - name: Set result as output value
       id: fake-api-server-running-result
-      shell: sh
+      shell: bash
       run: echo "running-result=$(echo $TODO_SOMETHING_OUTPUT)" >> $GITHUB_OUTPUT
 branding:
   icon: server
