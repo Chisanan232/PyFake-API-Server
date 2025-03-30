@@ -42,24 +42,24 @@ runs:
       run: |
         pip --version
         pip install -U poetry
-        poetry add "fake-api-server[all]"
-        poetry run pip list
+        pip install -U fake-api-server
+        pip list
 
     - name: Show the Fake-API-Server version info
       shell: bash
       run: |
-        poetry run fake --version
-        poetry run fake --help
+        fake --version
+        fake --help
 
     - name: Troubleshooting log 1
       shell: bash
       run: |
-        poetry run fake rest-server --help
+        fake rest-server --help
 
     - name: Troubleshooting log 2
       shell: bash
       run: |
-        poetry run fake rest-server run --help
+        fake rest-server run --help
 
     - name: Run Fake-API-Server with ${{ inputs.subcommand }} under ${{ inputs.server-type }}
       if: inputs.server-type != '' && inputs.subcommand != '' && inputs.subcommand-options != ''
