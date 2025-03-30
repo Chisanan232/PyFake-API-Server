@@ -75,6 +75,8 @@ Daemonize the fake server process to run it in background.
 
 It doesn't accept any value and default is ``False``. It's ``True`` if set this option.
 
+!!! info "New in version 0.4.1"
+
 
 ## ``--access-log-file`` <log file path\>
 
