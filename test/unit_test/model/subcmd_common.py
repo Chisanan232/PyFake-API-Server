@@ -5,6 +5,10 @@ import pytest
 from fake_api_server.command.subcommand import SubCommandLine
 from fake_api_server.model.subcmd_common import SysArg
 
+USE_PYTHON_FILE_RUN_CMD: str = "pyfake.py"
+USE_RELATIVE_PYTHON_FILE_PATH_RUN_CMD: str = "./pyfake.py"
+USE_MORE_RELATIVE_PYTHON_FILE_PATH_RUN_CMD: str = "./test/pyfake.py"
+
 
 class TestSysArg:
 
@@ -12,27 +16,27 @@ class TestSysArg:
         ("sys_args_value", "expect_data_model"),
         [
             # only one sub-command
-            (["pyfake.py", "--help"], SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base)),
-            (["pyfake.py", "-h"], SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base)),
+            ([USE_PYTHON_FILE_RUN_CMD, "--help"], SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base)),
+            ([USE_PYTHON_FILE_RUN_CMD, "-h"], SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base)),
             (
-                ["pyfake.py", "run"],
+                [USE_PYTHON_FILE_RUN_CMD, "run"],
                 SysArg(pre_subcmd=SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base), subcmd=SubCommandLine.Run),
             ),
             (
-                ["./test/pyfake.py", "run", "-h"],
+                [USE_MORE_RELATIVE_PYTHON_FILE_PATH_RUN_CMD, "run", "-h"],
                 SysArg(pre_subcmd=SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base), subcmd=SubCommandLine.Run),
             ),
             (
-                ["./pyfake.py", "run", "-c", "./sample-api.yaml"],
+                [USE_RELATIVE_PYTHON_FILE_PATH_RUN_CMD, "run", "-c", "./sample-api.yaml"],
                 SysArg(pre_subcmd=SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base), subcmd=SubCommandLine.Run),
             ),
             (
-                ["./pyfake.py", "run", "--app-type", "fastapi"],
+                [USE_RELATIVE_PYTHON_FILE_PATH_RUN_CMD, "run", "--app-type", "fastapi"],
                 SysArg(pre_subcmd=SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base), subcmd=SubCommandLine.Run),
             ),
             # nested sub-command which includes 2 or more sub-commands
             (
-                ["./test/pyfake.py", "rest-server", "run", "-h"],
+                [USE_MORE_RELATIVE_PYTHON_FILE_PATH_RUN_CMD, "rest-server", "run", "-h"],
                 SysArg(
                     pre_subcmd=SysArg(
                         pre_subcmd=SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base), subcmd=SubCommandLine.RestServer
@@ -41,7 +45,7 @@ class TestSysArg:
                 ),
             ),
             (
-                ["./test/pyfake.py", "rest-server", "run", "-c", "./sample-api.yaml"],
+                [USE_MORE_RELATIVE_PYTHON_FILE_PATH_RUN_CMD, "rest-server", "run", "-c", "./sample-api.yaml"],
                 SysArg(
                     pre_subcmd=SysArg(
                         pre_subcmd=SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base), subcmd=SubCommandLine.RestServer
@@ -50,7 +54,7 @@ class TestSysArg:
                 ),
             ),
             (
-                ["./test/pyfake.py", "rest-server", "run", "--app-type", "fastapi"],
+                [USE_MORE_RELATIVE_PYTHON_FILE_PATH_RUN_CMD, "rest-server", "run", "--app-type", "fastapi"],
                 SysArg(
                     pre_subcmd=SysArg(
                         pre_subcmd=SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base), subcmd=SubCommandLine.RestServer
