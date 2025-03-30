@@ -66,6 +66,17 @@ This property is the totally same function with [format.size].
 [format.size]: ./value_format.md#formatsize_1
 
 
+### ``format.variables[*].static_value``
+
+Set the specific value as being fixed.
+
+This property is the totally same function with [format.static_value].
+
+[format.static_value]: ./value_format.md#formatstatic_value
+
+!!! info "New in version 0.4.2"
+
+
 ### ``format.variables[*].unique_element``
 
 Set the value as element of array should be unique or not.

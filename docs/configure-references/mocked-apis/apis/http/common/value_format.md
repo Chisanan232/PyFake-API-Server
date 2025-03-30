@@ -15,12 +15,17 @@ The following format strategies are provided by **_PyFake-API-Server_**:
 | Strategy name   | Purpose                                                                                 |
 |:----------------|:----------------------------------------------------------------------------------------|
 | `BY_DATA_TYPE`  | Randomly generate value by the setting data type                                        |
+| `STATIC_VALUE`  | Generate value from static value only                                                   |
 | `FROM_ENUMS`    | Randomly generate value from an array                                                   |
 | `CUSTOMIZE`     | Randomly generate value by customization value which may includes the [format variable] |
 | `FROM_TEMPLATE` | Use the [format setting] in ``template`` section to randomly generate value             |
 
   [format variable]: ./format_variable.md
   [format setting]: ../../../template/common_config/format.md
+
+!!! info "New in version 0.4.2"
+
+    Add new strategy `STATIC_VALUE` in version **0.4.2**.
 
 
 ### ``format.digit``
@@ -49,6 +54,40 @@ Set the value size of the value.
     length of value.
 
 About more details, please refer to [here](#formatsize_1).
+
+
+### ``format.static_value``
+
+Set the specific value be fixed for generating without any changes or modifications.
+
+Activate to use this property with strategy `STATIC_VALUE`.
+
+!!! tip "Exactly usage"
+
+    Sometimes we don't want the value is randomly which doesn't
+    be good to test, so we want to fix the value as a specific
+    value.
+
+    ```yaml title="api.yaml" hl_lines="8-9"
+    response:
+      strategy: object
+      properties:
+        - name: data
+          required: true
+          type: str
+          format:
+            strategy: static_value
+            static_value: OK
+    ```
+
+    The data it generates would always be `OK` no matter how
+    many you let it generate:
+
+    ```json title="part of result in API response"
+    { "data": "OK" }
+    ```
+
+!!! info "New in version 0.4.2"
 
 
 ### ``format.unique_element``
@@ -150,7 +189,6 @@ It recommends that activating to use this property with strategy `BY_DATA_TYPE` 
           format:
             unique_element: true
     ```
-
 
 !!! info "New in version 0.4.2"
 
