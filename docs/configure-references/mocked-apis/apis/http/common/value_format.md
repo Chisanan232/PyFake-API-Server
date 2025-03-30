@@ -97,7 +97,7 @@ value. It's `false` in default.
 
 It recommends that activating to use this property with strategy `BY_DATA_TYPE` which is array type value.
 
-!!! tip "When to use?"
+!!! example "When to use?"
 
     In generally, this property should be only used for array
     type property. Here provide a simple demonstration by pure
