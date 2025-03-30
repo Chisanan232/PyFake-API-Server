@@ -172,6 +172,42 @@ It recommends that activating to use this property with strategy `BY_DATA_TYPE` 
         { "data": ["ENUM_1", "ENUM_2"] }
         ```
 
+!!! tip "The data size won't be exactly same as `size` setting"
+
+    Sometime, the `format.size` setting is more than all possible
+    values of the array type value. For example, element with enum
+    format which only has 2 enum types, but the `format.size` could
+    up to 10 as maximum size, program would ignore it and set the
+    maximum size as the size of enum.
+
+    ```yaml title="api.yaml" hl_lines="9-11 16-19"
+    response:
+      strategy: object
+      properties:
+        - name: data
+          required: true
+          type: list
+          format:
+            unique_element: true
+            size:
+              max: 100
+              min: 50
+          items:
+            - required: true
+               type: str
+               format:
+                 strategy: from_enums
+                 enums:
+                   - ENUM_1
+                   - ENUM_2
+    ```
+
+    The data it generates would always up to the size of enum types:
+
+    ```json title="part of result in API response"
+    { "data": ["ENUM_1", "ENUM_2"] }
+    ```
+
 !!! Failure "Not make sense at non-array type data"
 
     From above demonstration, beleive you could understand how
