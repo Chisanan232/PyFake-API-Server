@@ -9,6 +9,7 @@ USE_PYTHON_FILE_RUN_CMD: str = "pyfake.py"
 USE_RELATIVE_PYTHON_FILE_PATH_RUN_CMD: str = "./pyfake.py"
 USE_MORE_RELATIVE_PYTHON_FILE_PATH_RUN_CMD: str = "./test/pyfake.py"
 USE_POETRY_RUN_CMD: str = "/Users/bryant/Library/Caches/pypoetry/virtualenvs/fake-api-server-LE7TJquz-py3.12/bin/fake"
+USE_GITHUB_ACTION_SHELL_RUN_CMD: str = "/opt/hostedtoolcache/Python/3.12.9/x64/bin/fake"
 
 
 class TestSysArg:
@@ -83,6 +84,33 @@ class TestSysArg:
             ),
             (
                 [USE_POETRY_RUN_CMD, "rest-server", "pull", "-h"],
+                SysArg(
+                    pre_subcmd=SysArg(
+                        pre_subcmd=SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base), subcmd=SubCommandLine.RestServer
+                    ),
+                    subcmd=SubCommandLine.Pull,
+                ),
+            ),
+            # run sub-command by GitHub Action environment
+            ([USE_GITHUB_ACTION_SHELL_RUN_CMD, "--help"], SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base)),
+            (
+                [USE_GITHUB_ACTION_SHELL_RUN_CMD, "rest-server", "-h"],
+                SysArg(
+                    pre_subcmd=SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base),
+                    subcmd=SubCommandLine.RestServer,
+                ),
+            ),
+            (
+                [USE_GITHUB_ACTION_SHELL_RUN_CMD, "rest-server", "run", "-h"],
+                SysArg(
+                    pre_subcmd=SysArg(
+                        pre_subcmd=SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base), subcmd=SubCommandLine.RestServer
+                    ),
+                    subcmd=SubCommandLine.Run,
+                ),
+            ),
+            (
+                [USE_GITHUB_ACTION_SHELL_RUN_CMD, "rest-server", "pull", "-h"],
                 SysArg(
                     pre_subcmd=SysArg(
                         pre_subcmd=SysArg(pre_subcmd=None, subcmd=SubCommandLine.Base), subcmd=SubCommandLine.RestServer
