@@ -66,6 +66,17 @@ This property is the totally same function with [format.size].
 [format.size]: ./value_format.md#formatsize_1
 
 
+### ``format.variables[*].unique_element``
+
+Set the value as element of array should be unique or not.
+
+This property is the totally same function with [format.unique_element].
+
+[format.unique_element]: ./value_format.md#formatunique_element
+
+!!! info "New in version 0.4.2"
+
+
 ### ``format.variables[*].enum``
 
 If the value must be one of multiple values, it could set the multiple values as an array at this property. The value

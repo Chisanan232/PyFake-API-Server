@@ -51,6 +51,110 @@ Set the value size of the value.
 About more details, please refer to [here](#formatsize_1).
 
 
+### ``format.unique_element``
+
+If the value be activated, it would generate multiple unique elements for array type property. It accepts a boolean type
+value. It's `false` in default.
+
+It recommends that activating to use this property with strategy `BY_DATA_TYPE` which is array type value.
+
+!!! tip "When to use?"
+
+    In generally, this property should be only used for array
+    type property. Here provide a simple demonstration by pure
+    value element of array with different :
+    
+    === "Element maybe deuplicated"
+        
+        Set a pure value element of array type property and
+        `format.unique_element` as `false` (in default):
+    
+        ```yaml title="api.yaml" hl_lines="8 16-19"
+        response:
+          strategy: object
+          properties:
+            - name: data
+              required: true
+              type: list
+              format:
+                unique_element: false
+                size:
+                  max: 5
+                  min: 2
+              items:
+                - required: true
+                   type: str
+                   format:
+                     strategy: from_enums
+                     enums:
+                       - ENUM_1
+                       - ENUM_2
+        ```
+
+        The data it generates would be an array type data with
+        size between 2 to 5 and also includes deuplicated elements:
+
+        ```json title="part of result in API response"
+        { "data": ["ENUM_2", "ENUM_1", "ENUM_1", "ENUM_2"] }
+        ```
+    
+    === "Element is unique"
+        
+        Set a pure value element of array type property and
+        `format.unique_element` as `true`:
+    
+        ```yaml title="api.yaml" hl_lines="8 16-19"
+        response:
+          strategy: object
+          properties:
+            - name: data
+              required: true
+              type: list
+              format:
+                unique_element: true
+                size:
+                  max: 5
+                  min: 2
+              items:
+                - required: true
+                   type: str
+                   format:
+                     strategy: from_enums
+                     enums:
+                       - ENUM_1
+                       - ENUM_2
+        ```
+
+        The data it generates would be an array type data with
+        size up to 2 as maximum because the enum types only has
+        2 types and also includes unique elements:
+
+        ```json title="part of result in API response"
+        { "data": ["ENUM_1", "ENUM_2"] }
+        ```
+
+!!! Failure "Not make sense at non-array type data"
+
+    From above demonstration, beleive you could understand how
+    to use the property `format.unique_element`. Therefore, it
+    does NOT make sense about using this property with non-array
+    type property.
+
+    ```yaml title="api.yaml" hl_lines="6 8"
+    response:
+      strategy: object
+      properties:
+        - name: data
+          required: true
+          type: int  # or str, bool, etc.
+          format:
+            unique_element: true
+    ```
+
+
+!!! info "New in version 0.4.2"
+
+
 ### ``format.enums``
 
 If the value must be one of multiple values, it could set the multiple values as an array at this property. The value
