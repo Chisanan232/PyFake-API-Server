@@ -3,10 +3,10 @@
 #####################################################################################################################
 #
 # Target:
-# Automate to get the software version of Python package and generate as the specific format for Docker image tag.
+# Send the specific API request to fake API server and check the request result is successfully or not.
 #
 # Description:
-# Use the version regex to get the software version of Python package, and output, re-generate docker version info from it.
+# Use command line *curl* and use regular expression to check the running result.
 #
 # Allowable options:
 #  -a [Server host]              The fake API server host.
