@@ -8,12 +8,12 @@ is managed by **Poetry**.
 
 [![Supported Versions](https://img.shields.io/pypi/pyversions/fake-api-server.svg?logo=python&logoColor=FBE072)](https://pypi.org/project/fake-api-server)
 
-**_PyFake-API-Server_** require Python version 3.8 up. Please make sure the Python version in your runtime environment.
+**_PyFake-API-Server_** require Python version 3.9 up. Please make sure the Python version in your runtime environment.
 
 ???+ tip "Recommended: Use the latest Python version to develop"
 
-    **_PyFake-API-Server_** only support Python version 3.8 +. If you're user, please make sure you're Python
-    version should be newer than version 3.8. However, for developers, it strongly suggests you should
+    **_PyFake-API-Server_** only support Python version 3.9 +. If you're user, please make sure you're Python
+    version should be newer than version 3.9. However, for developers, it strongly suggests you should
     upgrade your runtime environment Python to the latest version. We should not take too much time to
     develop with older version and the responsibility of the test running with older versions belong to
     CI tool. It does definitely not your job.

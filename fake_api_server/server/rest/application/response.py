@@ -12,6 +12,7 @@ from fake_api_server.model.api_config.apis import (
     HTTPResponse as MockAPIHTTPResponseConfig,
 )
 from fake_api_server.model.api_config.apis.response_strategy import ResponseStrategy
+from fake_api_server.model.api_config.value import FormatStrategy
 
 
 class BaseResponse(metaclass=ABCMeta):
@@ -82,54 +83,76 @@ class HTTPResponse:
     @classmethod
     def _generate_response_from_object(cls, data: MockAPIHTTPResponseConfig) -> dict:
 
-        def _initial_resp_details(v: ResponseProperty) -> Union[str, int, Decimal, bool, list, dict]:
+        def _initial_resp_details(resp_prop: ResponseProperty) -> Union[str, int, Decimal, bool, list, dict]:
 
             def _process_collection_data(
                 _v: ResponseProperty,
                 init_data: Union[list, dict],
                 insert_callback: Callable[[Union[list, dict], dict], Union[list, dict]],
             ) -> Union[list, dict]:
+                assert isinstance(value, (list, dict))
                 _value = init_data
                 _item = {}  # type: ignore[var-annotated]
                 for i in _v.items or []:
+                    while True:
+                        _item_details = _initial_resp_details(i)  # type: ignore[arg-type]
+                        if (
+                            _v.value_format is not None
+                            and _v.value_format.unique_element is True
+                            and _item_details in value
+                        ):
+                            continue
+                        else:
+                            break
                     if len(_v.items) == 1 and not i.name:  # type: ignore[arg-type]
-                        _item = _initial_resp_details(i)  # type: ignore[arg-type, assignment]
+                        _item = _item_details  # type: ignore[assignment]
                     else:
-                        _item[i.name] = _initial_resp_details(i)  # type: ignore[arg-type]
+                        _item[i.name] = _item_details
                 _value = insert_callback(_value, _item)
                 return _value
 
-            assert v.value_type
-            data_type = locate(v.value_type)
+            assert resp_prop.value_type
+            data_type = locate(resp_prop.value_type)
             assert isinstance(data_type, type)
-            if locate(v.value_type) is str:
-                value = v.generate_value_by_format(data_type=data_type, default="random string")
-            elif locate(v.value_type) is int:
-                value = v.generate_value_by_format(data_type=data_type, default="random integer")
-            elif locate(v.value_type) is float:
-                value = v.generate_value_by_format(data_type=data_type, default="random big decimal")
-            elif locate(v.value_type) is bool:
-                value = v.generate_value_by_format(data_type=data_type, default="random boolean")
-            elif locate(v.value_type) is list:
+            if data_type is str:
+                value = resp_prop.generate_value_by_format(data_type=data_type, default="random string")
+            elif data_type is int:
+                value = resp_prop.generate_value_by_format(data_type=data_type, default="random integer")
+            elif data_type is float:
+                value = resp_prop.generate_value_by_format(data_type=data_type, default="random big decimal")
+            elif data_type is bool:
+                value = resp_prop.generate_value_by_format(data_type=data_type, default="random boolean")
+            elif data_type is list:
 
                 def _insert_callback(init_value: list, item: dict) -> list:
                     init_value.append(item)
                     return init_value
 
                 list_size = 1
-                if v.value_format is not None and v.value_format.size is not None:
-                    list_size = v.value_format.size.generate_random_int()
+                if resp_prop.value_format is not None and resp_prop.value_format.size is not None:
+                    list_size = resp_prop.value_format.size.generate_random_int()
+                    if (
+                        resp_prop.items
+                        and len(resp_prop.items) == 1
+                        and resp_prop.items[0].value_format is not None
+                        and resp_prop.items[0].value_format.strategy is FormatStrategy.FROM_ENUMS
+                        and len(resp_prop.items[0].value_format.enums) < list_size
+                        and resp_prop.value_format.unique_element
+                    ):
+                        list_size = len(resp_prop.items[0].value_format.enums)
                 value = []
                 for _ in range(list_size):
-                    one_element_value = _process_collection_data(v, init_data=[], insert_callback=_insert_callback)  # type: ignore[arg-type]
+                    one_element_value = _process_collection_data(resp_prop, init_data=[], insert_callback=_insert_callback)  # type: ignore[arg-type]
+                    assert isinstance(value, list)
                     value.extend(one_element_value)
-            elif locate(v.value_type) is dict:
+            elif data_type is dict:
 
                 def _insert_callback(init_value: dict, item: dict) -> dict:  # type: ignore[misc]
                     init_value.update(item)
                     return init_value
 
-                value = _process_collection_data(v, init_data={}, insert_callback=_insert_callback)  # type: ignore[arg-type]
+                value = {}
+                value = _process_collection_data(resp_prop, init_data={}, insert_callback=_insert_callback)  # type: ignore[arg-type]
             else:
                 raise NotImplementedError
             return value

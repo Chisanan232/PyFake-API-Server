@@ -50,7 +50,7 @@ Its configuration has been designed for humanly understand what settings the API
 
 ## Requirements
 
-Python 3.8+
+Python 3.9+
 
 **_PyFake-API-Server_** stands on the shoulder of giants:
 

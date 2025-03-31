@@ -55,8 +55,8 @@ to mock APIs with configuration only.
 ## Python versions support
 
 The code base of **_PyFake-API-Server_** to set up an application still depends on third party Python package, i.e., **_Flask_**, **_FastAPI_**,
-etc. So the Python versions it supports also be affected by them, e.g., **_Flask_** only supports Python version 3.8 up currently. So
-**_PyFake-API-Server_** also only supports version Python 3.8 up.
+etc. So the Python versions it supports also be affected by them, e.g., **_Flask_** only supports Python version 3.9 up currently. So
+**_PyFake-API-Server_** also only supports version Python 3.9 up.
 
 [![Supported Versions](https://img.shields.io/pypi/pyversions/fake-api-server.svg?logo=python&logoColor=FBE072)](https://pypi.org/project/fake-api-server)
 
