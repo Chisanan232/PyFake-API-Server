@@ -65,7 +65,6 @@ This property is the totally same function with [format.size].
 
 [format.size]: ./value_format.md#formatsize_1
 
-Just test (please remove this line after test done)
 
 ### ``format.variables[*].static_value``
 

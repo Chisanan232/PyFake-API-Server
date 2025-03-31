@@ -3,7 +3,7 @@ name: documentation
 on:
   push:
     branches:
-      - "develop/**"    # For testing (test protection feature)
+#      - "develop/**"    # For testing
       - "master"
     paths:
 #     Documentation
