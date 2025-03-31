@@ -43,28 +43,12 @@ runs:
         pip --version
         pip install -U "fake-api-server[all]"
         pip list
-#        pip install -U urllib3
 
     - name: Show the Fake-API-Server version info
       shell: bash
       run: |
         fake --version
         fake --help
-
-    - name: Troubleshooting log where fake
-      shell: bash
-      run: |
-        which fake
-
-    - name: Troubleshooting log 1
-      shell: bash
-      run: |
-        fake rest-server --help
-
-    - name: Troubleshooting log 2
-      shell: bash
-      run: |
-        fake rest-server run --help
 
     - name: Run Fake-API-Server with ${{ inputs.subcommand }} under ${{ inputs.server-type }}
       if: inputs.server-type != '' && inputs.subcommand != '' && inputs.subcommand-options != ''
