@@ -11,7 +11,7 @@ on:
       - ".github/workflows/documentation.yaml"
       - "scripts/ci/**documentation**.sh"
 #     Doc - Content
-      - "docs/**.*.md"
+      - "docs/**/*.md"
 #     Doc - MkDoc config
       - "mkdocs.yml"
 #     Python source code package info
