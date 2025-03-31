@@ -18,10 +18,6 @@ inputs:
     description: "The entire command line of the PyFake-API-Server to run (without prefix command line *fake*)."
     required: false
     default: ""
-outputs:
-  fake-api-server-running-result:
-    description: "If it has any change, this property value would be *true*."
-    value: ${{ steps.fake-api-server-running-result.outputs.running-result }}
 runs:
   using: "composite"
   steps:
@@ -59,11 +55,6 @@ runs:
       if: inputs.directly-command-line != ''
       shell: bash
       run: fake ${{ inputs.directly-command-line }}
-
-    - name: Set result as output value
-      id: fake-api-server-running-result
-      shell: bash
-      run: echo "running-result=$(echo $TODO_SOMETHING_OUTPUT)" >> $GITHUB_OUTPUT
 branding:
   icon: server
   color: 'black'
