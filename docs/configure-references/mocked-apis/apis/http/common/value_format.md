@@ -15,6 +15,7 @@ The following format strategies are provided by **_PyFake-API-Server_**:
 | Strategy name   | Purpose                                                                                 |
 |:----------------|:----------------------------------------------------------------------------------------|
 | `BY_DATA_TYPE`  | Randomly generate value by the setting data type                                        |
+| `STATIC_VALUE`  | Generate value from static value only                                                   |
 | `FROM_ENUMS`    | Randomly generate value from an array                                                   |
 | `CUSTOMIZE`     | Randomly generate value by customization value which may includes the [format variable] |
 | `FROM_TEMPLATE` | Use the [format setting] in ``template`` section to randomly generate value             |
@@ -22,12 +23,16 @@ The following format strategies are provided by **_PyFake-API-Server_**:
   [format variable]: ./format_variable.md
   [format setting]: ../../../template/common_config/format.md
 
+!!! info "New in version 0.4.2"
+
+    Add new strategy `STATIC_VALUE` in version **0.4.2**.
+
 
 ### ``format.digit``
 
 Set the digit setting of the value.
 
-!!! info "Not for every value"
+!!! tip "Not for every value"
 
     This property would be great to use for numeric type value only. A
     non-numeric type value, i.e., pure string type or boolean type value,
@@ -40,7 +45,7 @@ About more details, please refer to [here](#formatdigit_1).
 
 Set the value size of the value.
 
-!!! info "Size in different meanings for different types"
+!!! tip "Size in different meanings for different types"
 
     A size of value could be 2 meanings:
 
@@ -49,6 +54,179 @@ Set the value size of the value.
     length of value.
 
 About more details, please refer to [here](#formatsize_1).
+
+
+### ``format.static_value``
+
+Set the specific value be fixed for generating without any changes or modifications.
+
+Activate to use this property with strategy `STATIC_VALUE`.
+
+!!! example "Exactly usage"
+
+    Sometimes we don't want the value is randomly which doesn't
+    be good to test, so we want to fix the value as a specific
+    value.
+
+    ```yaml title="api.yaml" hl_lines="8-9"
+    response:
+      strategy: object
+      properties:
+        - name: data
+          required: true
+          type: str
+          format:
+            strategy: static_value
+            static_value: OK
+    ```
+
+    The data it generates would always be `OK` no matter how
+    many you let it generate:
+
+    ```json title="part of result in API response"
+    { "data": "OK" }
+    ```
+
+!!! info "New in version 0.4.2"
+
+
+### ``format.unique_element``
+
+If the value be activated, it would generate multiple unique elements for array type property. It accepts a boolean type
+value. It's `false` in default.
+
+It recommends that activating to use this property with strategy `BY_DATA_TYPE` which is array type value.
+
+!!! example "When to use?"
+
+    In generally, this property should be only used for array
+    type property. Here provide a simple demonstration by pure
+    value element of array with different :
+    
+    === "Element maybe deuplicated"
+        
+        Set a pure value element of array type property and
+        `format.unique_element` as `false` (in default):
+    
+        ```yaml title="api.yaml" hl_lines="8 16-19"
+        response:
+          strategy: object
+          properties:
+            - name: data
+              required: true
+              type: list
+              format:
+                unique_element: false
+                size:
+                  max: 5
+                  min: 2
+              items:
+                - required: true
+                   type: str
+                   format:
+                     strategy: from_enums
+                     enums:
+                       - ENUM_1
+                       - ENUM_2
+        ```
+
+        The data it generates would be an array type data with
+        size between 2 to 5 and also includes deuplicated elements:
+
+        ```json title="part of result in API response"
+        { "data": ["ENUM_2", "ENUM_1", "ENUM_1", "ENUM_2"] }
+        ```
+    
+    === "Element is unique"
+        
+        Set a pure value element of array type property and
+        `format.unique_element` as `true`:
+    
+        ```yaml title="api.yaml" hl_lines="8 16-19"
+        response:
+          strategy: object
+          properties:
+            - name: data
+              required: true
+              type: list
+              format:
+                unique_element: true
+                size:
+                  max: 5
+                  min: 2
+              items:
+                - required: true
+                   type: str
+                   format:
+                     strategy: from_enums
+                     enums:
+                       - ENUM_1
+                       - ENUM_2
+        ```
+
+        The data it generates would be an array type data with
+        size up to 2 as maximum because the enum types only has
+        2 types and also includes unique elements:
+
+        ```json title="part of result in API response"
+        { "data": ["ENUM_1", "ENUM_2"] }
+        ```
+
+!!! tip "The data size won't be exactly same as `size` setting"
+
+    Sometime, the `format.size` setting is more than all possible
+    values of the array type value. For example, element with enum
+    format which only has 2 enum types, but the `format.size` could
+    up to 10 as maximum size, program would ignore it and set the
+    maximum size as the size of enum.
+
+    ```yaml title="api.yaml" hl_lines="9-11 16-19"
+    response:
+      strategy: object
+      properties:
+        - name: data
+          required: true
+          type: list
+          format:
+            unique_element: true
+            size:
+              max: 100
+              min: 50
+          items:
+            - required: true
+               type: str
+               format:
+                 strategy: from_enums
+                 enums:
+                   - ENUM_1
+                   - ENUM_2
+    ```
+
+    The data it generates would always up to the size of enum types:
+
+    ```json title="part of result in API response"
+    { "data": ["ENUM_1", "ENUM_2"] }
+    ```
+
+!!! Failure "Not make sense at non-array type data"
+
+    From above demonstration, beleive you could understand how
+    to use the property `format.unique_element`. Therefore, it
+    does NOT make sense about using this property with non-array
+    type property.
+
+    ```yaml title="api.yaml" hl_lines="6 8"
+    response:
+      strategy: object
+      properties:
+        - name: data
+          required: true
+          type: int  # or str, bool, etc.
+          format:
+            unique_element: true
+    ```
+
+!!! info "New in version 0.4.2"
 
 
 ### ``format.enums``
