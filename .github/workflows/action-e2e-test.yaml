@@ -43,7 +43,7 @@ jobs:
         with:
           server-type: 'rest-server'
           subcommand: 'run'
-          subcommand-options: '--app-type fastapi -c ./test/data/divide_test_pull/divide_api+has_tag/expect_config/api.yaml -b 127.0.0.1:9672 -D'
+          subcommand-options: '--app-type fastapi -c ./test/data/divide_test_pull/divide_api+has_tag/expect_config/api.yaml -b 0.0.0.0:9672 -D'
 
       - name: Validate the feature by trying to send API request
         shell: bash
@@ -62,7 +62,7 @@ jobs:
       - name: Run Fake-API-Server
         uses: ./
         with:
-          directly-command-line: 'rest-server run --app-type fastapi -c ./test/data/divide_test_pull/divide_api+has_tag/expect_config/api.yaml -b 127.0.0.1:9672 -D'
+          directly-command-line: 'rest-server run --app-type fastapi -c ./test/data/divide_test_pull/divide_api+has_tag/expect_config/api.yaml -b 0.0.0.0:9672 -D'
 
       - name: Validate the feature by trying to send API request
         shell: bash
