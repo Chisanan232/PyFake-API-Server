@@ -1,1 +1,1 @@
-v0.4.1 - Support run fake server in background 🍻
+v0.4.2 - Fix critical bugs and support new format properties 🍻
