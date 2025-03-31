@@ -9,6 +9,7 @@ on:
     paths:
       # End-to-End test
       - ".github/workflows/action-e2e-test.yaml"
+      - "scripts/ci/verify_fake_api_server_state.sh"
       # Source code and config
       - "fake_api_server/**/*.py"
       - "!**/__pkg_info__.py"
@@ -24,6 +25,7 @@ on:
     paths:
       # End-to-End test
       - ".github/workflows/action-e2e-test.yaml"
+      - "scripts/ci/verify_fake_api_server_state.sh"
       # Source code and config
       - "fake_api_server/**/*.py"
       - "!**/__pkg_info__.py"
