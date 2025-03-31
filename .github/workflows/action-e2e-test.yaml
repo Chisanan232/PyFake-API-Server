@@ -48,12 +48,13 @@ jobs:
       - name: Validate the feature by trying to send API request
         shell: bash
         run: |
-          sleep 5
-          echo "check log file ..."
+          echo "Wait 3 seconds for setup fake API server ..."
+          sleep 3
+          echo "========== check log file =========="
           ls -la
           cat ./fake-api-server.log
+          echo "========== check feature by request API to fake server =========="
           bash ./scripts/ci/verify_fake_api_server_state.sh -a '127.0.0.1:9672' -p '/api/v1/test/foo?date=2025-03-29T00:00:00.000Z&fooType=ENUM1'
-#          curl http://127.0.0.1:9672/api/v1/test/foo?date=2025-03-29T00:00:00.000Z&fooType=ENUM1
 
   run_rest-server_subcmd_run_by_entire_cmd:
     runs-on: ubuntu-latest
@@ -69,12 +70,13 @@ jobs:
       - name: Validate the feature by trying to send API request
         shell: bash
         run: |
-          sleep 5
-          echo "check log file ..."
+          echo "Wait 3 seconds for setup fake API server ..."
+          sleep 3
+          echo "========== check log file =========="
           ls -la
           cat ./fake-api-server.log
+          echo "========== check feature by request API to fake server =========="
           bash ./scripts/ci/verify_fake_api_server_state.sh -a '127.0.0.1:9672' -p '/api/v1/test/foo?date=2025-03-29T00:00:00.000Z&fooType=ENUM1'
-#          curl http://127.0.0.1:9672/api/v1/test/foo?date=2025-03-29T00:00:00.000Z&fooType=ENUM1
 
   run_rest-server_subcmd_get:
     runs-on: ubuntu-latest
