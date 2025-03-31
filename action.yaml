@@ -42,9 +42,7 @@ runs:
 
     - name: Show the Fake-API-Server version info
       shell: bash
-      run: |
-        fake --version
-        fake --help
+      run: fake --version
 
     - name: Run Fake-API-Server with ${{ inputs.subcommand }} under ${{ inputs.server-type }}
       if: inputs.server-type != '' && inputs.subcommand != '' && inputs.subcommand-options != ''
