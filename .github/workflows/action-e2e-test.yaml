@@ -1,0 +1,173 @@
+name: E2E test
+
+on:
+  # No matter for push or pull request events, it would trigger CI for safely saving the source code.
+  # For the push event, it only runs building and testing.
+  push:
+    branches:
+      - "master"
+    paths:
+      # End-to-End test
+      - ".github/workflows/action-e2e-test.yaml"
+      - "scripts/ci/verify_fake_api_server_state.sh"
+      # Source code and config
+      - "fake_api_server/**/*.py"
+      - "!**/__pkg_info__.py"
+      - "action.yaml"
+      - "pyproject.toml"
+      - "poetry.lock"
+
+  # For the push event, in addition to build and test would be run, it would trigger other service to keep the reports
+  # or other checking, i.e., record the test report by CodeCov and check the code quality by SonarQube.
+  pull_request:
+    branches:
+      - "master"
+    paths:
+      # End-to-End test
+      - ".github/workflows/action-e2e-test.yaml"
+      - "scripts/ci/verify_fake_api_server_state.sh"
+      # Source code and config
+      - "fake_api_server/**/*.py"
+      - "!**/__pkg_info__.py"
+      - "action.yaml"
+      - "pyproject.toml"
+      - "poetry.lock"
+
+jobs:
+  run_rest-server_subcmd_run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v4
+
+      - name: Run Fake-API-Server
+        uses: ./
+        with:
+          server-type: 'rest-server'
+          operation: run
+          operation-options: --app-type fastapi -c ./test/data/divide_test_pull/divide_api+has_tag/expect_config/api.yaml -b 0.0.0.0:9672 -D
+
+      - name: Validate the feature by trying to send API request
+        shell: bash
+        run: |
+          echo "Wait 3 seconds for setup fake API server ..."
+          sleep 3
+          echo "========== check log file =========="
+          ls -la
+          cat ./fake-api-server.log
+          echo "========== check feature by request API to fake server =========="
+          bash ./scripts/ci/verify_fake_api_server_state.sh -a '127.0.0.1:9672' -p '/api/v1/test/foo?date=2025-03-29T00:00:00.000Z&fooType=ENUM1'
+
+  run_rest-server_subcmd_run_by_entire_cmd:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v4
+
+      - name: Run Fake-API-Server
+        uses: ./
+        with:
+          directly-command-line: 'rest-server run --app-type fastapi -c ./test/data/divide_test_pull/divide_api+has_tag/expect_config/api.yaml -b 127.0.0.1:9672 -D'
+
+      - name: Validate the feature by trying to send API request
+        shell: bash
+        run: |
+          echo "Wait 3 seconds for setup fake API server ..."
+          sleep 3
+          echo "========== check log file =========="
+          ls -la
+          cat ./fake-api-server.log
+          echo "========== check feature by request API to fake server =========="
+          bash ./scripts/ci/verify_fake_api_server_state.sh -a '127.0.0.1:9672' -p '/api/v1/test/foo?date=2025-03-29T00:00:00.000Z&fooType=ENUM1'
+
+  run_rest-server_subcmd_get:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v4
+
+      - name: Run Fake-API-Server
+        uses: ./
+        with:
+          server-type: 'rest-server'
+          operation: get
+          operation-options: -p ./test/data/divide_test_pull/divide_api+has_tag/expect_config/api.yaml -s -a /foo
+
+  run_rest-server_subcmd_add:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v4
+
+      - name: Run Fake-API-Server
+        uses: ./
+        with:
+          server-type: 'rest-server'
+          operation: add
+          operation-options: --help
+
+  run_rest-server_subcmd_sample:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v4
+
+      - name: Run Fake-API-Server
+        uses: ./
+        with:
+          server-type: 'rest-server'
+          operation: sample
+          operation-options: -p
+
+  run_rest-server_subcmd_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v4
+
+      - name: Run Fake-API-Server
+        uses: ./
+        with:
+          server-type: 'rest-server'
+          operation: check
+          operation-options: -p ./test/data/divide_test_pull/divide_api+has_tag/expect_config/api.yaml
+
+  run_rest-server_subcmd_pull:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v4
+
+      - name: Run Fake-API-Server
+        uses: ./
+        with:
+          server-type: 'rest-server'
+          operation: pull
+          operation-options: --help
+
+  with-invalid-os:
+    runs-on: windows-latest
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v4
+
+      - name: Run Fake-API-Server-Surveillance
+        id: e2e-test-invalid-case
+        uses: ./
+        with:
+          config-path: ./test/config/e2e_test/with_invalid_os.yaml
+        continue-on-error: true
+
+      - name: Check on failures
+        run: |
+          echo "[DEBUG] running state: ${{ steps.e2e-test-invalid-case.outcome }}"
+          if ( "${{ steps.e2e-test-invalid-case.outcome }}" -eq "failure" )
+          {
+              echo "It runs fail as expect. Test PASS."
+              exit 0
+          }
+          else
+          {
+              echo "It runs success as unexpect. Test FAIL."
+              exit 1
+          }

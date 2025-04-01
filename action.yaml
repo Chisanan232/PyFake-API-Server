@@ -1,0 +1,58 @@
+name: "Operate PyFake-API-Server"
+description: "Operate PyFake-API-Server by command line."
+author: "Bryant Liu"
+inputs:
+  server-type:
+    description: "The API server type for PyFake-API-Server to operate."
+    required: false
+    default: ""
+  operation:
+    description: "The subcommand line of the API server type to do some operations. [options: run,get,add,check,pull,sample]"
+    required: false
+    default: ""
+  operation-options:
+    description: "The command line options of the subcommand line with the API server type to do some operations."
+    required: false
+    default: ""
+  directly-command-line:
+    description: "The entire command line of the PyFake-API-Server to run (without prefix command line *fake*)."
+    required: false
+    default: ""
+runs:
+  using: "composite"
+  steps:
+    - name: Fail-fast in unsupported environments
+      if: runner.os == 'Windows'
+      shell: bash -eEuo pipefail {0}
+      run: |
+        >&2 echo This action is only able to run under GNU/Linux or Apple MacOS environments
+        exit 1
+
+    - name: Install Python 3.12 for running Fake-API-Server
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install Python dependencies for Fake-API-Server
+      shell: bash
+      run: |
+        pip --version
+        pip install -U "fake-api-server[all]"
+        pip list
+
+    - name: Show the Fake-API-Server version info
+      shell: bash
+      run: fake --version
+
+    - name: Run Fake-API-Server with ${{ inputs.operation }} under ${{ inputs.server-type }}
+      if: inputs.server-type != '' && inputs.operation != '' && inputs.operation-options != ''
+      shell: bash
+      run: fake ${{ inputs.server-type }} ${{ inputs.operation }} ${{ inputs.operation-options }}
+
+    - name: Run Fake-API-Server by directory command line
+      if: inputs.directly-command-line != ''
+      shell: bash
+      run: fake ${{ inputs.directly-command-line }}
+branding:
+  icon: server
+  color: 'black'
