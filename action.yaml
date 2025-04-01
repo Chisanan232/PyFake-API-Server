@@ -44,10 +44,10 @@ runs:
       shell: bash
       run: fake --version
 
-    - name: Run Fake-API-Server with ${{ inputs.subcommand }} under ${{ inputs.server-type }}
-      if: inputs.server-type != '' && inputs.subcommand != '' && inputs.subcommand-options != ''
+    - name: Run Fake-API-Server with ${{ inputs.operation }} under ${{ inputs.server-type }}
+      if: inputs.server-type != '' && inputs.operation != '' && inputs.operation-options != ''
       shell: bash
-      run: fake ${{ inputs.server-type }} ${{ inputs.subcommand }} ${{ inputs.subcommand-options }}
+      run: fake ${{ inputs.server-type }} ${{ inputs.operation }} ${{ inputs.operation-options }}
 
     - name: Run Fake-API-Server by directory command line
       if: inputs.directly-command-line != ''
