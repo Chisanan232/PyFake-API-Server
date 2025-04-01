@@ -6,8 +6,8 @@ inputs:
     description: "The API server type for PyFake-API-Server to operate."
     required: false
     default: ""
-  subcommand:
-    description: "The subcommand line of the API server type to do some operations."
+  operation:
+    description: "The subcommand line of the API server type to do some operations. [options: run,get,add,check,pull,sample]"
     required: false
     default: ""
   subcommand-options:
