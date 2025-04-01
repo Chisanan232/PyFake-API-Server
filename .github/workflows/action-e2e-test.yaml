@@ -45,7 +45,7 @@ jobs:
         with:
           server-type: 'rest-server'
           operation: run
-          subcommand-options: '--app-type fastapi -c ./test/data/divide_test_pull/divide_api+has_tag/expect_config/api.yaml -b 0.0.0.0:9672 -D'
+          operation-options: --app-type fastapi -c ./test/data/divide_test_pull/divide_api+has_tag/expect_config/api.yaml -b 0.0.0.0:9672 -D
 
       - name: Validate the feature by trying to send API request
         shell: bash
@@ -91,7 +91,7 @@ jobs:
         with:
           server-type: 'rest-server'
           operation: get
-          subcommand-options: '-p ./test/data/divide_test_pull/divide_api+has_tag/expect_config/api.yaml -s -a /foo'
+          operation-options: -p ./test/data/divide_test_pull/divide_api+has_tag/expect_config/api.yaml -s -a /foo
 
   run_rest-server_subcmd_add:
     runs-on: ubuntu-latest
@@ -104,7 +104,7 @@ jobs:
         with:
           server-type: 'rest-server'
           operation: add
-          subcommand-options: '--help'
+          operation-options: --help
 
   run_rest-server_subcmd_sample:
     runs-on: ubuntu-latest
@@ -117,7 +117,7 @@ jobs:
         with:
           server-type: 'rest-server'
           operation: sample
-          subcommand-options: '-p'
+          operation-options: -p
 
   run_rest-server_subcmd_check:
     runs-on: ubuntu-latest
@@ -130,7 +130,7 @@ jobs:
         with:
           server-type: 'rest-server'
           operation: check
-          subcommand-options: '-p ./test/data/divide_test_pull/divide_api+has_tag/expect_config/api.yaml'
+          operation-options: -p ./test/data/divide_test_pull/divide_api+has_tag/expect_config/api.yaml
 
   run_rest-server_subcmd_pull:
     runs-on: ubuntu-latest
@@ -143,7 +143,7 @@ jobs:
         with:
           server-type: 'rest-server'
           operation: pull
-          subcommand-options: '--help'
+          operation-options: --help
 
   with-invalid-os:
     runs-on: windows-latest

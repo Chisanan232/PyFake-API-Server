@@ -10,7 +10,7 @@ inputs:
     description: "The subcommand line of the API server type to do some operations. [options: run,get,add,check,pull,sample]"
     required: false
     default: ""
-  subcommand-options:
+  operation-options:
     description: "The command line options of the subcommand line with the API server type to do some operations."
     required: false
     default: ""
