@@ -18,6 +18,10 @@ inputs:
     description: "The entire command line of the PyFake-API-Server to run (without prefix command line *fake*)."
     required: false
     default: ""
+  apply-version:
+    description: "The entire command line of the PyFake-API-Server to run (without prefix command line *fake*). [options: stable,latest]"
+    required: false
+    default: "stable"
 runs:
   using: "composite"
   steps:
@@ -33,7 +37,27 @@ runs:
       with:
         python-version: '3.12'
 
+    - name: Checkout Fake-API-Server GitHub repository
+      if: inputs.apply-version == 'latest'
+      uses: actions/checkout@v4
+      with:
+        repository: 'Chisanan232/PyFake-API-Server'
+        ref: 'master'
+
     - name: Install Python dependencies for Fake-API-Server
+      if: inputs.apply-version == 'latest'
+      shell: bash
+      run: |
+        pip --version
+        pip install -U poetry
+        pip list
+        echo "[INFO] Poetry version:"
+        poetry --version
+        echo "[INFO] Install dependencies by Poetry:"
+        poetry install
+
+    - name: Install Python dependencies for Fake-API-Server
+      if: inputs.apply-version == 'stable'
       shell: bash
       run: |
         pip --version
