@@ -44,7 +44,7 @@ runs:
         repository: 'Chisanan232/PyFake-API-Server'
         ref: 'master'
 
-    - name: Install Python dependencies for Fake-API-Server
+    - name: Install Python dependencies for Fake-API-Server by *Poetry* for latest version source code
       if: inputs.apply-version == 'latest'
       shell: bash
       run: |
@@ -56,7 +56,7 @@ runs:
         echo "[INFO] Install dependencies by Poetry:"
         poetry install
 
-    - name: Install Python dependencies for Fake-API-Server
+    - name: Install Python dependencies for Fake-API-Server by *pip* directly
       if: inputs.apply-version == 'stable'
       shell: bash
       run: |
