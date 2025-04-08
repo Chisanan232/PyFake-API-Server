@@ -34,6 +34,31 @@ on:
       - "poetry.lock"
 
 jobs:
+  use_latest_run_rest-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v4
+
+      - name: Run Fake-API-Server
+        uses: ./
+        with:
+          server-type: 'rest-server'
+          operation: run
+          operation-options: --app-type fastapi -c ./test/data/divide_test_pull/divide_api+has_tag/expect_config/api.yaml -b 0.0.0.0:9672 -D
+          apply-version: 'latest'
+
+      - name: Validate the feature by trying to send API request
+        shell: bash
+        run: |
+          echo "Wait 3 seconds for setup fake API server ..."
+          sleep 3
+          echo "========== check log file =========="
+          ls -la
+          cat ./fake-api-server.log
+          echo "========== check feature by request API to fake server =========="
+          bash ./scripts/ci/verify_fake_api_server_state.sh -a '127.0.0.1:9672' -p '/api/v1/test/foo?date=2025-03-29T00:00:00.000Z&fooType=ENUM1'
+
   run_rest-server_subcmd_run:
     runs-on: ubuntu-latest
     steps:
