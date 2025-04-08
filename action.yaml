@@ -37,6 +37,8 @@ runs:
       with:
         python-version: '3.12'
 
+############### The workflow for latest version of PyFake-API-Server ###############
+
     - name: Checkout Fake-API-Server GitHub repository
       if: inputs.apply-version == 'latest'
       uses: actions/checkout@v4
@@ -56,6 +58,24 @@ runs:
         echo "[INFO] Install dependencies by Poetry:"
         poetry install
 
+    - name: Show the Fake-API-Server version info
+      if: inputs.apply-version == 'latest'
+      shell: bash
+      run: poetry run fake --version
+
+    - name: Run Fake-API-Server with ${{ inputs.operation }} under ${{ inputs.server-type }}
+      if: inputs.apply-version == 'latest' && inputs.server-type != '' && inputs.operation != '' && inputs.operation-options != ''
+      shell: bash
+      run: poetry run fake ${{ inputs.server-type }} ${{ inputs.operation }} ${{ inputs.operation-options }}
+
+    - name: Run Fake-API-Server by directory command line
+      if: inputs.apply-version == 'latest' && inputs.directly-command-line != ''
+      shell: bash
+      run: poetry run fake ${{ inputs.directly-command-line }}
+
+############################# end for latest version ###############################
+############### The workflow for latest version of PyFake-API-Server ###############
+
     - name: Install Python dependencies for Fake-API-Server by *pip* directly
       if: inputs.apply-version == 'stable'
       shell: bash
@@ -65,18 +85,21 @@ runs:
         pip list
 
     - name: Show the Fake-API-Server version info
+      if: inputs.apply-version == 'stable'
       shell: bash
       run: fake --version
 
     - name: Run Fake-API-Server with ${{ inputs.operation }} under ${{ inputs.server-type }}
-      if: inputs.server-type != '' && inputs.operation != '' && inputs.operation-options != ''
+      if: inputs.apply-version == 'stable' && inputs.server-type != '' && inputs.operation != '' && inputs.operation-options != ''
       shell: bash
       run: fake ${{ inputs.server-type }} ${{ inputs.operation }} ${{ inputs.operation-options }}
 
     - name: Run Fake-API-Server by directory command line
-      if: inputs.directly-command-line != ''
+      if: inputs.apply-version == 'stable' && inputs.directly-command-line != ''
       shell: bash
       run: fake ${{ inputs.directly-command-line }}
+
+############################# end for stable version ###############################
 branding:
   icon: server
   color: 'black'
