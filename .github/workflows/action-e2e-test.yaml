@@ -37,6 +37,9 @@ jobs:
   use_latest_run_rest-server:
     runs-on: ubuntu-latest
     steps:
+      - name: Clone project
+        uses: actions/checkout@v4
+
       - name: Run Fake-API-Server
         uses: ./
         with:
