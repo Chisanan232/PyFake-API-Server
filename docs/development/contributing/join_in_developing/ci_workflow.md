@@ -172,7 +172,7 @@ Here records all the CI workflows of this project runs.
 ## Documentation CI
 
 [![documentation](https://github.com/Chisanan232/PyFake-API-Server/actions/workflows/documentation.yaml/badge.svg)](https://github.com/Chisanan232/PyFake-API-Server/actions/workflows/documentation.yaml)
-[![pages-build-deployment](https://github.com/Chisanan232/PyFake-API-Server/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/Chisanan232/PyFake-API-Server/actions/workflows/pages/pages-build-deployment)
+[![pages-build-deployment](https://github.com/Chisanan232/PyFake-API-Server/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://github.com/Chisanan232/PyFake-API-Server/actions/workflows/pages/pages-build-deployment)
 
 * CI state
 
