@@ -4,7 +4,7 @@
 # Build and run web server for mocking APIs
 #
 # Environment variables:
-# * WEB_FRAMEWORK: PyMock-Server would use the Python web framework to set up and run web server to mock APIs.
+# * WEB_FRAMEWORK: PyFake-API-Server would use the Python web framework to set up and run web server to mock APIs.
 #         - Default values: 'auto'. It means that it would automatically scan which Python package it could use in the
 #                           currenct Python runtime environment.
 #         - Allowable values: 'auto', 'flask', 'fastapi'
@@ -43,7 +43,7 @@ COPY . /mit-pyfake-api-server/
 # # Expose the port to outside to provide service
 EXPOSE 9672
 
-# # Install the Python dependencies for PyMock-Server package
+# # Install the Python dependencies for PyFake-API-Server package
 RUN poetry install --without dev
 # # It already in a virtual runtime environment --- a Docker container, so it doesn't need to create another independent
 # # virtual enviroment again in Docker virtual environment
