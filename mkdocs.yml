@@ -193,6 +193,10 @@ nav:
           - check: command-line-usage/rest-server/subcmd-check.md
           - sample: command-line-usage/rest-server/subcmd-sample.md
           - pull: command-line-usage/rest-server/subcmd-pull.md
+    - Action usages:
+      - Run in GitHub Action:
+        - action-usage/index.md
+        - As RestFUL API: action-usage/rest-server.md
   - Configure references:
     - Basic info: configure-references/config-basic-info.md
     - Mocked API:
