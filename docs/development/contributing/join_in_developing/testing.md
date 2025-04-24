@@ -135,6 +135,13 @@ script accept one argument --- test type. You have 3 types value could use:
 
     Run all system tests and the test modules are in directory [_test/system_test_].
 
+!!! note "And how about for end-to-end test ... ?"
+
+    The end-to-end test in **_PyFake-API-Server_** is only
+    for customzied action recently. It must push the code
+    to remote GitHub repository to verify its feature. We
+    don't consider to test it in local side currently.
+
 [_test_]: https://github.com/Chisanan232/PyFake-API-Server/tree/master/test
 
 === "Out of Poetry shell"
