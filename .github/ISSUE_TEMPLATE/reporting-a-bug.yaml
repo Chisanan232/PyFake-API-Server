@@ -20,10 +20,11 @@ body:
       label: Python version
       description: What Python version do you use to run and see the problem?
       options:
+        - 3.13
+        - 3.12
         - 3.11
         - 3.10
         - 3.9
-        - 3.8
     validations:
       required: true
 

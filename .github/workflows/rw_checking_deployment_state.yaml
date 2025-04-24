@@ -39,7 +39,7 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Install PyMock-Server from PyPI
+      - name: Install PyFake-API-Server from PyPI
         run: |
           python3 -m pip install --upgrade pip
           pip3 install -U pip
