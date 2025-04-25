@@ -9,7 +9,7 @@
 #     3. Push the Docker image to Docker hub
 #
 # Trigger condition:
-#     This CI workflow only be triggered by changing the package info module (__pkg_info__.py) of *PyMock-Server*.
+#     This CI workflow only be triggered by changing the package info module (__pkg_info__.py) of *PyFake-API-Server*.
 #
 
 name: docker
