@@ -1,8 +1,9 @@
 # Testing
 
-About the testing, **_PyFake-API-Server_** has some prerequisites or rules of it. **_PyFake-API-Server_** has 2 types test: unit test and
-integration test. Unit test are in directory _test/unit_test_ and integration test are in directory _test/integration_test_.
+About the testing, **_PyFake-API-Server_** has some prerequisites or rules of it. **_PyFake-API-Server_** has [4 types tests]:
+unit test, integration test, system test and end-to-end test.
 
+[4 types tests]: https://github.com/Chisanan232/PyFake-API-Server/tree/master/test
 
 ## Requirements for testing
 
@@ -96,19 +97,35 @@ script accept one argument --- test type. You have 3 types value could use:
 
 * all-test
 
-    Run entire all tests under directory _test_.
+    Run entire all tests under directory [_test_].
 
 * unit-test
 
-    Run all unit tests and the test modules are in directory _test/unit_test_.
+    Run all unit tests and the test modules are in directory [_test/unit_test_].
 
 * integration-test
 
-    Run all integration tests and the test modules are in directory _test/integration_test_.
+    Run all integration tests and the test modules are in directory [_test/integration_test_].
 
 * system-test
 
-    Run all system tests and the test modules are in directory _test/system_test_.
+    Run all system tests and the test modules are in directory [_test/system_test_].
+
+!!! note "And how about for end-to-end test ... ?"
+    
+    In configuration file [_.github/workflows/action-e2e-test.yaml_]
+  
+    The end-to-end test in **_PyFake-API-Server_** to
+    simulate the usages of really scenarios for the
+    customized action. It must push the code to remote
+    GitHub repository to verify its feature. We don't
+    consider to test it in local side currently.
+
+[_test_]: https://github.com/Chisanan232/PyFake-API-Server/tree/master/test
+[_test/unit_test_]: https://github.com/Chisanan232/PyFake-API-Server/tree/master/test/unit_test
+[_test/integration_test_]: https://github.com/Chisanan232/PyFake-API-Server/tree/master/test/integration_test
+[_test/system_test_]: https://github.com/Chisanan232/PyFake-API-Server/tree/master/test/system_test
+[_.github/workflows/action-e2e-test.yaml_]: https://github.com/Chisanan232/PyFake-API-Server/blob/master/.github/workflows/action-e2e-test.yaml
 
 === "Out of Poetry shell"
     
