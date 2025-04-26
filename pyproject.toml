@@ -50,7 +50,7 @@ mini = [
 fastapi = [
     "PyYAML (>=6.0)",
     "fastapi (>=0.110,<0.116)",
-    "uvicorn (>=0.29,<0.34)",
+    "uvicorn[standard] (>=0.29,<0.34)",
 ]
 flask = [
     "PyYAML (>=6.0)",
@@ -60,7 +60,7 @@ flask = [
 all = [
     "PyYAML (>=6.0)",
     "fastapi (>=0.110,<0.116)",
-    "uvicorn (>=0.29,<0.34)",
+    "uvicorn[standard] (>=0.29,<0.34)",
     "Flask (>=3.0.2)",
     "gunicorn (>=21.2,<24.0)",
 ]
