@@ -25,20 +25,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Sleep for 20 minutes
-        run: sleep $PR_WAITING_TIME
-#        run: sleep 10    # Just for testing
+#        run: sleep $PR_WAITING_TIME
+        run: sleep 10    # Just for testing
 
-      - name: Check whether the approved PR has been merged or not
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Merge target PR if it still doesn't be merged
+        shell: bash
         run: |
           set -exm
-          echo "PR_NUMBER=$(bash ./scripts/ci/chk_pr_list.sh)" >> "$GITHUB_ENV"
-          echo "PR_NUMBER: $PR_NUMBER"
-        shell: bash
-
-      - name: Merge PR if it doesn't be merged
-        if: ${{ env.PR_NUMBER != '' && (env.PR_NUMBER != '0' || env.PR_NUMBER != 0) }}
+          bash ./scripts/ci/chk_pr_list.sh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr merge $PR_NUMBER --merge
