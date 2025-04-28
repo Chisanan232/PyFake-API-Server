@@ -16,6 +16,7 @@ else
     # Save the value to environment variable in GitHub Action
 #    echo "PR_NUMBER=$pr_number" >> $GITHUB_OUTPUT
     # shellcheck disable=SC2059
-    printf "$pr_number"
+    echo "PR#$pr_number still doesn't be merged. Merge it in this CI workflow."
+    gh pr merge "$pr_number" --merge
     exit 0
 fi
