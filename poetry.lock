@@ -552,14 +552,14 @@ test = ["coverage[toml]", "ddt (>=1.1.1,!=1.4.3)", "mock ; python_version < \"3.
 
 [[package]]
 name = "griffe"
-version = "1.4.0"
+version = "1.7.3"
 description = "Signatures for entire Python programs. Extract the structure, the frame, the skeleton of your project, to generate API documentation or find breaking changes in your API."
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["docs"]
 files = [
-    {file = "griffe-1.4.0-py3-none-any.whl", hash = "sha256:e589de8b8c137e99a46ec45f9598fc0ac5b6868ce824b24db09c02d117b89bc5"},
-    {file = "griffe-1.4.0.tar.gz", hash = "sha256:8fccc585896d13f1221035d32c50dec65830c87d23f9adb9b1e6f3d63574f7f5"},
+    {file = "griffe-1.7.3-py3-none-any.whl", hash = "sha256:c6b3ee30c2f0f17f30bcdef5068d6ab7a2a4f1b8bf1a3e74b56fffd21e1c5f75"},
+    {file = "griffe-1.7.3.tar.gz", hash = "sha256:52ee893c6a3a968b639ace8015bec9d36594961e156e23315c8e8e51401fa50b"},
 ]
 
 [package.dependencies]
@@ -1185,20 +1185,21 @@ python-legacy = ["mkdocstrings-python-legacy (>=0.2.1)"]
 
 [[package]]
 name = "mkdocstrings-python"
-version = "1.11.1"
+version = "1.16.10"
 description = "A Python handler for mkdocstrings."
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["docs"]
 files = [
-    {file = "mkdocstrings_python-1.11.1-py3-none-any.whl", hash = "sha256:a21a1c05acef129a618517bb5aae3e33114f569b11588b1e7af3e9d4061a71af"},
-    {file = "mkdocstrings_python-1.11.1.tar.gz", hash = "sha256:8824b115c5359304ab0b5378a91f6202324a849e1da907a3485b59208b797322"},
+    {file = "mkdocstrings_python-1.16.10-py3-none-any.whl", hash = "sha256:63bb9f01f8848a644bdb6289e86dc38ceddeaa63ecc2e291e3b2ca52702a6643"},
+    {file = "mkdocstrings_python-1.16.10.tar.gz", hash = "sha256:f9eedfd98effb612ab4d0ed6dd2b73aff6eba5215e0a65cea6d877717f75502e"},
 ]
 
 [package.dependencies]
-griffe = ">=0.49"
-mkdocs-autorefs = ">=1.2"
-mkdocstrings = ">=0.26"
+griffe = ">=1.6.2"
+mkdocs-autorefs = ">=1.4"
+mkdocstrings = ">=0.28.3"
+typing-extensions = {version = ">=4.0", markers = "python_version < \"3.11\""}
 
 [[package]]
 name = "mypy"
@@ -2225,11 +2226,12 @@ version = "4.12.2"
 description = "Backported and Experimental Type Hints for Python 3.8+"
 optional = false
 python-versions = ">=3.8"
-groups = ["main", "dev"]
+groups = ["main", "dev", "docs"]
 files = [
     {file = "typing_extensions-4.12.2-py3-none-any.whl", hash = "sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d"},
     {file = "typing_extensions-4.12.2.tar.gz", hash = "sha256:1a7ead55c7e559dd4dee8856e3a88b41225abfe1ce8df57b7c13915fe121ffb8"},
 ]
+markers = {docs = "python_version < \"3.11\""}
 
 [[package]]
 name = "ujson"
@@ -2741,4 +2743,4 @@ mini = ["PyYAML"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<3.13"
-content-hash = "51b2d2512e8748aa41fed828d76fbf7f953f489c440599a8025ce59c4652fb65"
+content-hash = "b0b79c74c96ed841f51afd347ee54405f309fd6a366f691d40ad3b7de52a1336"
