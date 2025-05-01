@@ -82,7 +82,7 @@ fake = "fake_api_server.runner:run"
 [tool.poetry.group.dev.dependencies]
 # Dependency for test
 pytest = "^8.3.5"
-pytest-cov = "^5.0.0"
+pytest-cov = "^6.1.1"
 #pytest-html = "^4.1.1"
 pytest-rerunfailures = "^15.0"
 coverage = "^7.8"
