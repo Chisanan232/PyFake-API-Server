@@ -7,11 +7,15 @@ on:
     types:
       - submitted
     branches:
-      - "master"
+  # Disabled this CI workflow for now. Need to improve it.
+#      - "master"
 
 env:
   PR_NUMBER: 0
   PR_WAITING_TIME: 1200    # 60 seconds * 20 minutes
+
+#permissions:
+#  pull-requests: write
 
 jobs:
   auto-merge-pr:
