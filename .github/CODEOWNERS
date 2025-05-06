@@ -1,0 +1,46 @@
+# PyFake-API-Server CODEOWNERS
+# Each line is a file pattern followed by one or more owners.
+
+# Default owners for everything in the repo
+*                               @Chisanan232
+
+# Core library code
+/fake_api_server/               @Chisanan232
+/fake_api_server/model/         @Chisanan232
+/fake_api_server/controller/    @Chisanan232
+
+# API configuration templates
+/fake_api_server/model/api_config/template/    @Chisanan232
+
+# Testing code
+/test/                          @Chisanan232
+/test/unit_test/                @Chisanan232
+/test/integration_test/         @Chisanan232
+
+# Documentation
+/docs/                          @Chisanan232
+*.md                            @Chisanan232
+/mkdocs.yml                     @Chisanan232
+
+# CI/CD and GitHub configuration
+/.github/                       @Chisanan232
+/.github/workflows/             @Chisanan232
+/action.yaml                    @Chisanan232
+
+# Docker configuration
+/Dockerfile*                    @Chisanan232
+/.dockerignore                  @Chisanan232
+
+# Project configuration files
+/pyproject.toml                 @Chisanan232
+/poetry.lock                    @Chisanan232
+/pytest.ini                     @Chisanan232
+/mypy.ini                       @Chisanan232
+/.pylintrc                      @Chisanan232
+/.pre-commit-config.yaml        @Chisanan232
+/.coveragerc                    @Chisanan232
+/codecov.yml                    @Chisanan232
+/sonar-project.properties       @Chisanan232
+
+# Scripts directory
+/scripts/                       @Chisanan232
