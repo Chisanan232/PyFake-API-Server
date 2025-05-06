@@ -4,6 +4,9 @@
 # Default owners for everything in the repo
 *                               @Chisanan232
 
+# Software license annotation
+/LICENSE                        @Chisanan232
+
 # Core library code
 /fake_api_server/               @Chisanan232
 /fake_api_server/model/         @Chisanan232
@@ -16,6 +19,7 @@
 /test/                          @Chisanan232
 /test/unit_test/                @Chisanan232
 /test/integration_test/         @Chisanan232
+/test/system_test/              @Chisanan232
 
 # Documentation
 /docs/                          @Chisanan232
