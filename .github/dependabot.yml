@@ -5,8 +5,6 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    reviewers:
-      - "Chisanan232"
     labels:
       - "🔍 enhancement"
       - "🤖 github actions"
@@ -18,8 +16,6 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    reviewers:
-      - "Chisanan232"
     labels:
       - "🔍 enhancement"
       - "🐍 python"
