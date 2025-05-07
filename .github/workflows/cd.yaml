@@ -13,7 +13,10 @@ on:
 jobs:
   check_version-state:
 #    name: Check the version update state
-    uses: ./.github/workflows/rw_checking_deployment_state.yaml
+    uses: Chisanan232/GitHub-Action_Reusable_Workflows-Python/.github/workflows/rw_checking_deployment_state.yaml@v7.3
+    with:
+      library-name: fake-api-server
+      library-source-code-path: ./fake_api_server
 
 
   build_git-tag_and_create_github-release:
