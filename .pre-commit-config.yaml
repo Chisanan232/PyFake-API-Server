@@ -58,4 +58,5 @@ repos:
 #        - --strict
         - --ignore-missing-imports
         - --show-traceback
+        - --extra-checks
       additional_dependencies: [types-PyYAML>=6.0.12.9]
