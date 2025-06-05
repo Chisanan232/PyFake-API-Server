@@ -67,7 +67,7 @@ class TemplateFormatEntity(_Config, _Checkable):
         ):
             return False
         assert self.config
-        self.config.stop_if_fail = self.stop_if_fail
+        self.config.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
         return self.config.is_work()
 
 
@@ -209,7 +209,7 @@ class TemplateFormatConfig(_Config, _Checkable):
         )
 
         def _i_is_work(i: _CheckableConfigType) -> bool:
-            i.stop_if_fail = self.stop_if_fail
+            i.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
             return i.is_work()
 
         # Checking array type property *entities*
@@ -301,7 +301,7 @@ class TemplateCommonConfig(_Config, _Checkable):
 
         # Checking array type property *format*
         if self.format:
-            self.format.stop_if_fail = self.stop_if_fail
+            self.format.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
             if not self.format.is_work():
                 return False
         return True

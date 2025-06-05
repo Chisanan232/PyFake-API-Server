@@ -51,7 +51,7 @@ class BaseConfig(_Config, _Checkable):
             A **BaseConfig** type object.
 
         """
-        self.url = data.get("url", None)
+        self.url = data.get("url", "")
         return self
 
     def is_work(self) -> bool:

@@ -35,7 +35,7 @@ class IteratorItem(_HasFormatPropConfig, _HasItemsPropConfig):
 
     def _deserialize_item_with_data(self, i: dict) -> "IteratorItem":
         item = IteratorItem(
-            name=i.get("name", None),
+            name=i.get("name", ""),
             value_type=i.get("type", None),
             required=i.get("required", True),
             items=i.get("items", None),
@@ -67,7 +67,7 @@ class IteratorItem(_HasFormatPropConfig, _HasItemsPropConfig):
 
     @_Config._ensure_process_with_not_empty_value
     def deserialize(self, data: Dict[str, Any]) -> Optional["IteratorItem"]:
-        self.name = data.get("name", None)
+        self.name = data.get("name", "")
         self.required = data.get("required", None)
         self.value_type = data.get("type", None)
 

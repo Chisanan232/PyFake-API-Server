@@ -117,8 +117,8 @@ class HTTPRequest(_DividableOnlyTemplatableConfig, _Checkable):
 
         super().deserialize(data)
 
-        self.method = data.get("method", None)
-        parameters: List[dict] = data.get("parameters", None)
+        self.method = data.get("method", "")
+        parameters: Optional[List[dict]] = data.get("parameters", None)
         if parameters and not isinstance(parameters, list):
             raise TypeError("Argument *parameters* should be a list type value.")
         self.parameters = [_deserialize_parameter(parameter) for parameter in parameters] if parameters else []
@@ -148,11 +148,11 @@ class HTTPRequest(_DividableOnlyTemplatableConfig, _Checkable):
             return False
         if self.parameters:
 
-            def _p_is_work(p: APIParameter) -> bool:
-                p.stop_if_fail = self.stop_if_fail
+            def _param_is_work(p: APIParameter) -> bool:
+                p.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
                 return p.is_work()
 
-            is_work_params = list(filter(lambda p: _p_is_work(p), self.parameters))
+            is_work_params = list(filter(lambda p: _param_is_work(p), self.parameters))
             if len(is_work_params) != len(self.parameters):
                 return False
         return True

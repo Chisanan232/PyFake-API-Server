@@ -103,7 +103,7 @@ class HTTPResponse(_DividableOnlyTemplatableConfig, _Checkable):
     path: str = field(default_factory=str)
 
     # Strategy: object
-    properties: List[ResponseProperty] = field(default_factory=list)
+    properties: Optional[List[ResponseProperty]] = None
 
     def _compare(self, other: "HTTPResponse") -> bool:
         templatable_config = super()._compare(other)
@@ -209,9 +209,9 @@ class HTTPResponse(_DividableOnlyTemplatableConfig, _Checkable):
 
         self.strategy = ResponseStrategy(data.get("strategy", None))
         if self.strategy is ResponseStrategy.STRING:
-            self.value = data.get("value", None)
+            self.value = data.get("value", "")
         elif self.strategy is ResponseStrategy.FILE:
-            self.path = data.get("path", None)
+            self.path = data.get("path", "")
         elif self.strategy is ResponseStrategy.OBJECT:
             properties = data.get("properties", None)
             if properties is not None:
@@ -228,16 +228,17 @@ class HTTPResponse(_DividableOnlyTemplatableConfig, _Checkable):
     def is_work(self) -> bool:
         assert self.strategy is not None
         if ResponseStrategy(self.strategy) is ResponseStrategy.STRING:
+            print(f"[DEBUG] self.value: {self.value}")
             return self.should_not_be_none(
                 config_key=f"{self.absolute_model_key}.value",
                 config_value=self.value,
                 valid_callback=self._chk_response_value_validity,
             )
         elif ResponseStrategy(self.strategy) is ResponseStrategy.FILE:
+            print(f"[DEBUG] self.path: {self.path}")
             return self.should_not_be_none(
                 config_key=f"{self.absolute_model_key}.path",
                 config_value=self.path,
-                accept_empty=False,
                 valid_callback=self._chk_response_value_validity,
             )
         elif ResponseStrategy(self.strategy) is ResponseStrategy.OBJECT:
@@ -292,7 +293,7 @@ class HTTPResponse(_DividableOnlyTemplatableConfig, _Checkable):
             ), "If HTTP response strategy is *object*, the data type of response value must be *list*."
 
             def _resp_prop_is_work(p: ResponseProperty) -> bool:
-                p.stop_if_fail = self.stop_if_fail
+                p.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
                 return p.is_work()
 
             is_work_props = list(filter(lambda v: _resp_prop_is_work(v), config_value))

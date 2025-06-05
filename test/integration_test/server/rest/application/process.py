@@ -356,7 +356,7 @@ class TestHTTPRequestProcessWithFlask(HTTPProcessTestSpec):
         request.method = method
         if method.upper() == "GET":
             request.args = dd
-            request.args.getlist = MagicMock(return_value=api_params.get(_get_list_param(), []))  # type: ignore[method-assign]
+            request.args.getlist = MagicMock(return_value=api_params.get(_get_list_param(), []))
         else:
             request.form = None
             request.data = dd

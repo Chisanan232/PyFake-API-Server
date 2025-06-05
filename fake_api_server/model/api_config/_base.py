@@ -318,7 +318,7 @@ class _HasItemsPropConfig(_BaseConfig, _Checkable, ABC):
         if self.items:
 
             def _i_is_work(i: "_HasItemsPropConfig") -> bool:
-                i.stop_if_fail = self.stop_if_fail
+                i.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
                 return i.is_work()
 
             is_work_props = list(filter(lambda i: _i_is_work(i), self.items))

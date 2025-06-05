@@ -62,9 +62,9 @@ class TemplateConfig(_Config, _Checkable):
         ):
             return False
 
-        self.file.stop_if_fail = self.stop_if_fail
+        self.file.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
         if self.common_config:
-            self.common_config.stop_if_fail = self.stop_if_fail
+            self.common_config.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
             if not self.common_config.is_work():
                 return False
         return isinstance(self.activate, bool) and self.file.is_work()
