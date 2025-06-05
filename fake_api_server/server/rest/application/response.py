@@ -157,7 +157,7 @@ class HTTPResponse:
                 raise NotImplementedError
             return value
 
-        response_properties = data.properties
+        response_properties = data.properties or []
         response = {}
         for v in response_properties:
             # TODO: Handle the value with key *format*

@@ -283,7 +283,7 @@ class MockAPIs(_OperatingTemplatableConfig, _Checkable):
             self.template.absolute_model_key: self.template,
         }
         if self.base is not None:
-            self.base.stop_if_fail = self.stop_if_fail
+            self.base.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
             under_check[self.base.absolute_model_key] = self.base
         if not self.props_should_not_be_none(under_check=under_check):
             return False
@@ -299,10 +299,10 @@ class MockAPIs(_OperatingTemplatableConfig, _Checkable):
                     }
                 )
                 assert av is not None
-                av.stop_if_fail = self.stop_if_fail
+                av.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
                 if not api_config_is_valid or not av.is_work():
                     return False
-        self.template.stop_if_fail = self.stop_if_fail
+        self.template.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
         return self.template.is_work() and (self.base.is_work() if self.base else True)
 
     def is_empty(self) -> bool:
@@ -553,8 +553,8 @@ class FakeAPIConfig(_Config, _Checkable):
             A **APIConfig** type object.
 
         """
-        self.name = data.get("name", None)
-        self.description = data.get("description", None)
+        self.name = data.get("name", "")
+        self.description = data.get("description", "")
 
         mocked_apis = data.get("mocked_apis", None)
         mocked_apis = {"template": {}} if not mocked_apis else mocked_apis
@@ -579,7 +579,7 @@ class FakeAPIConfig(_Config, _Checkable):
                 exit_code=1,
             )
         assert self.apis is not None
-        self.apis.stop_if_fail = self.stop_if_fail
+        self.apis.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
         return self.apis.is_work()
 
     def is_empty(self) -> bool:

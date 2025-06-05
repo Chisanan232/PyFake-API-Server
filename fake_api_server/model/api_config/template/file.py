@@ -203,10 +203,10 @@ class TemplateConfigPathValues(_Config, _Checkable):
 
     def is_work(self) -> bool:
         # TODO: Check the path format
-        self.api.stop_if_fail = self.stop_if_fail
-        self.http.stop_if_fail = self.stop_if_fail
-        self.request.stop_if_fail = self.stop_if_fail
-        self.response.stop_if_fail = self.stop_if_fail
+        self.api.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
+        self.http.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
+        self.request.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
+        self.response.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
         return self.api.is_work() and self.http.is_work() and self.request.is_work() and self.response.is_work()
 
 
@@ -312,10 +312,10 @@ class TemplateFileConfig(_Config, _Checkable):
             accept_empty=False,
         ):
             return False
-        self.load_config.stop_if_fail = self.stop_if_fail
-        self.config_path_values.stop_if_fail = self.stop_if_fail
+        self.load_config.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
+        self.config_path_values.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
         if self.apply:
-            self.apply.stop_if_fail = self.stop_if_fail
+            self.apply.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
         return (
             isinstance(self.activate, bool)
             and self.load_config.is_work()

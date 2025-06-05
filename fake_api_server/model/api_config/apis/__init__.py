@@ -216,9 +216,9 @@ class HTTP(_GeneralTemplatableConfig, _Checkable):
         ):
             return False
         assert self.request is not None
-        self.request.stop_if_fail = self.stop_if_fail
+        self.request.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
         assert self.response is not None
-        self.response.stop_if_fail = self.stop_if_fail
+        self.response.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
         return self.request.is_work() and self.response.is_work()
 
     @property
@@ -399,7 +399,7 @@ class MockAPI(_GeneralTemplatableConfig, _Checkable):
 
         super().deserialize(data)
 
-        self.url = data.get("url", None)
+        self.url = data.get("url", "")
         http_info = data.get("http", {})
         if http_info:
             self.http = self._deserialize_as(HTTP, with_data=http_info)  # type: ignore[assignment]
@@ -434,7 +434,7 @@ class MockAPI(_GeneralTemplatableConfig, _Checkable):
             return False
 
         assert self.http is not None
-        self.http.stop_if_fail = self.stop_if_fail
+        self.http.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
         return self.http.is_work()
 
     @property

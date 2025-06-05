@@ -196,12 +196,12 @@ class Format(_Config, _Checkable):
             return False
 
         if self.digit is not None:
-            self.digit.stop_if_fail = self.stop_if_fail
+            self.digit.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
             if self.digit.is_work() is False:
                 return False
 
         if self.size is not None:
-            self.size.stop_if_fail = self.stop_if_fail
+            self.size.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
             if self.size.is_work() is False:
                 return False
 
@@ -379,7 +379,7 @@ class _HasFormatPropConfig(_BaseConfig, _Checkable, ABC):
 
     def is_work(self) -> bool:
         if self.value_format:
-            self.value_format.stop_if_fail = self.stop_if_fail
+            self.value_format.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
             if not self.value_format.is_work():
                 return False
 

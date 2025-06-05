@@ -205,14 +205,18 @@ class Variable(_Config, _Checkable):
 
     @_Config._ensure_process_with_not_empty_value
     def deserialize(self, data: Dict[str, Any]) -> Optional["Variable"]:
-        self.name = data.get("name", None)
+        self.name = data.get("name", "")
 
-        self.value_format = ValueFormat.to_enum(data.get("value_format", None))
+        value_format_str = data.get("value_format", None)
+        if value_format_str is not None:
+            self.value_format = ValueFormat.to_enum(value_format_str)
+        else:
+            self.value_format = None
         if not self.value_format:
             raise ValueError("Schema key *value_format* cannot be empty.")
 
         if self.value_format == ValueFormat.Static:
-            self.static_value = data.get("static_value", None)
+            self.static_value = data.get("static_value", "")
         elif self.value_format == ValueFormat.Enum:
             self.enum = data.get("enum", None)
         else:
@@ -254,12 +258,12 @@ class Variable(_Config, _Checkable):
             return False
 
         if self.digit is not None:
-            self.digit.stop_if_fail = self.stop_if_fail
+            self.digit.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
             if self.digit.is_work() is False:
                 return False
 
         if self.size is not None:
-            self.size.stop_if_fail = self.stop_if_fail
+            self.size.stop_if_fail = self.stop_if_fail if self.stop_if_fail is not None else True
             if self.size.is_work() is False:
                 return False
 
