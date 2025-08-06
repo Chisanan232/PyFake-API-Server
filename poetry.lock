@@ -1162,14 +1162,14 @@ pytz = ">=2025.1"
 
 [[package]]
 name = "mkdocs-material"
-version = "9.6.15"
+version = "9.6.16"
 description = "Documentation that simply works"
 optional = false
 python-versions = ">=3.8"
 groups = ["docs"]
 files = [
-    {file = "mkdocs_material-9.6.15-py3-none-any.whl", hash = "sha256:ac969c94d4fe5eb7c924b6d2f43d7db41159ea91553d18a9afc4780c34f2717a"},
-    {file = "mkdocs_material-9.6.15.tar.gz", hash = "sha256:64adf8fa8dba1a17905b6aee1894a5aafd966d4aeb44a11088519b0f5ca4f1b5"},
+    {file = "mkdocs_material-9.6.16-py3-none-any.whl", hash = "sha256:8d1a1282b892fe1fdf77bfeb08c485ba3909dd743c9ba69a19a40f637c6ec18c"},
+    {file = "mkdocs_material-9.6.16.tar.gz", hash = "sha256:d07011df4a5c02ee0877496d9f1bfc986cfb93d964799b032dd99fe34c0e9d19"},
 ]
 
 [package.dependencies]
@@ -2693,4 +2693,4 @@ mini = ["PyYAML"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<3.13"
-content-hash = "b1ac1f3d798b8de156c0b0fcd042e1cd414ec4291d3b07e6740e6be240ff3df5"
+content-hash = "65807a23e4af0ac14ac5fe1beb52db8fe9816ea6818e515116285adc8f3f0f4e"
