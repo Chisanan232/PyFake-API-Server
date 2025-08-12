@@ -87,7 +87,7 @@ pytest-cov = "^6.2.1"
 pytest-rerunfailures = "^15.1"
 coverage = "^7.10"
 # Dependency for CI
-pre-commit = "^4.2.0"
+pre-commit = "^4.3.0"
 pylint = "^3.3.8"
 mypy = "^1.17.1"
 # Dependency of web framework Flask
