@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Run Fake-API-Server with RestFUL server & subcommand line *run*
         uses: ./
@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Run Fake-API-Server with RestFUL server & subcommand line *run*
         uses: ./
@@ -87,7 +87,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Run Fake-API-Server with RestFUL server & subcommand line *run*
         uses: ./
@@ -109,7 +109,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Run Fake-API-Server with RestFUL server & subcommand line *get*
         uses: ./
@@ -122,7 +122,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Run Fake-API-Server with RestFUL server & subcommand line *add*
         uses: ./
@@ -135,7 +135,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Run Fake-API-Server with RestFUL server & subcommand line *sample*
         uses: ./
@@ -148,7 +148,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Run Fake-API-Server with RestFUL server & subcommand line *check*
         uses: ./
@@ -161,7 +161,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Run Fake-API-Server with RestFUL server & subcommand line *pull*
         uses: ./
@@ -174,7 +174,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Clone project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Run Fake-API-Server with invalid OS
         id: e2e-test-invalid-case
