@@ -91,7 +91,7 @@ pre-commit = "^4.3.0"
 pylint = "^3.3.8"
 mypy = "^1.17.1"
 # Dependency of web framework Flask
-Flask = "^3.1.1"
+Flask = "^3.1.2"
 gunicorn = ">=21.2,<24.0"
 # Dependency of web framework FastAPI
 fastapi = {extras = ["all"], version = ">=0.110,<0.116"}
