@@ -41,7 +41,7 @@ runs:
 
     - name: Checkout Fake-API-Server GitHub repository
       if: inputs.apply-version == 'latest'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         repository: 'Chisanan232/PyFake-API-Server'
         ref: 'master'

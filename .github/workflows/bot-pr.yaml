@@ -26,7 +26,7 @@ jobs:
     name: Auto-merge PR if it waits for long time
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Sleep for 20 minutes
 #        run: sleep $PR_WAITING_TIME
