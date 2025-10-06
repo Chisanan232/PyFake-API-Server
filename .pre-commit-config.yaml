@@ -11,7 +11,7 @@ repos:
     - id: trailing-whitespace
     - id: detect-private-key
 - repo: https://github.com/PyCQA/isort
-  rev: 6.0.1
+  rev: 6.1.0
   hooks:
     - id: isort
       args: # arguments to configure black
@@ -24,7 +24,7 @@ repos:
         - --remove-all-unused-imports
         - --ignore-init-module-imports
         - --in-place
-- repo: https://github.com/psf/black
+- repo: https://github.com/psf/black-pre-commit-mirror
   rev: 25.9.0
   hooks:
     - id: black
