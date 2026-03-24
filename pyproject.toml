@@ -103,7 +103,7 @@ optional = true
 
 [tool.poetry.group.docs.dependencies]
 mkdocs = "^1.4.3"
-mkdocs-material = "^9.7.1"
+mkdocs-material = "^9.7.6"
 mkdocs-autorefs = "^1.4.4"
 mkdocstrings = ">=0.24.1,<0.31.0"
 mkdocstrings-python = "^1.18.2"
