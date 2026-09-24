@@ -1,3 +1,11 @@
+> [!IMPORTANT]
+> **Maintenance status: active development is paused.**
+>
+> Active development of this project is currently paused. While it is paused, regular feature
+> work, dependency upgrades, compatibility updates and security fixes are not guaranteed, and
+> issues and pull requests may not receive a timely response. Existing releases remain
+> available on PyPI.
+
 <h1 align="center">
   PyFake-API-Server
 </h1>
