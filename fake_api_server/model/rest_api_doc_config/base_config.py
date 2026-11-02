@@ -13,6 +13,7 @@ try:
     from http import HTTPMethod, HTTPStatus
 except ImportError:
     from http import HTTPStatus
+
     from fake_api_server.model.http import HTTPMethod  # type: ignore[assignment]
 
 from ._base_model_adapter import (
