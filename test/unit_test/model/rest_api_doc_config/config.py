@@ -9,6 +9,7 @@ try:
     from http import HTTPMethod, HTTPStatus
 except ImportError:
     from http import HTTPStatus
+
     from fake_api_server.model.http import HTTPMethod
 
 from fake_api_server.exceptions import CannotParsingAPIDocumentVersion
